@@ -19,7 +19,7 @@ setup: Dockerfile Dockerfile.jsbuild
 	docker run -it $(DOCKER_MOUNTS) stellarium-web-dev yarn install
 
 dev:
-	docker run -it -p 8080:8080 -p 8888:8888 $(DOCKER_MOUNTS) stellarium-web-dev yarn run dev
+	docker run -it -p 8080:8080 -p 8888:8888 $(DOCKER_MOUNTS) -e CHOKIDAR_USEPOLLING=true stellarium-web-dev yarn run dev
 
 lint:
 	docker run -it -p 8080:8080 -p 8888:8888 $(DOCKER_MOUNTS) stellarium-web-dev yarn run lint

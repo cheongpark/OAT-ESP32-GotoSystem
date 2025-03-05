@@ -2,6 +2,23 @@ module.exports = {
   runtimeCompiler: true,
   publicPath: process.env.CDN_ENV ? process.env.CDN_ENV : '/',
 
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://api.noctuasky.com',
+        changeOrigin: true,
+        secure: false,
+        pathRewrite: {
+          '^/api': '/api'
+        },
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET'
+        }
+      }
+    }
+  },
+
   chainWebpack: config => {
     // workaround taken from webpack/webpack#6642
     config.output
