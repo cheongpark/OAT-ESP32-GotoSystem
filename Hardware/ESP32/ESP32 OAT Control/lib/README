@@ -1,0 +1,43 @@
+이 디렉토리는 프로젝트에 특화된 (개인) 라이브러리를 위한 것입니다.
+PlatformIO는 이들을 정적 라이브러리로 컴파일하고 실행 파일에 링크합니다.
+
+각 라이브러리의 소스 코드는 별도의 디렉토리에 배치해야 합니다
+("lib/your_library_name/[Code]").
+
+예를 들어, 다음의 예제 라이브러리 `Foo`와 `Bar`의 구조를 참조하세요:
+
+|--lib
+|  |
+|  |--Bar
+|  |  |--docs
+|  |  |--examples
+|  |  |--src
+|  |     |- Bar.c
+|  |     |- Bar.h
+|  |  |- library.json (선택 사항. 사용자 정의 빌드 옵션 등을 위해) https://docs.platformio.org/page/librarymanager/config.html
+|  |
+|  |--Foo
+|  |  |- Foo.c
+|  |  |- Foo.h
+|  |
+|  |- README --> 이 파일
+|
+|- platformio.ini
+|--src
+   |- main.c
+
+`src/main.c`에서 Foo와 Bar를 사용하는 예제 내용:
+```
+#include <Foo.h>
+#include <Bar.h>
+
+int main (void)
+{
+  ...
+}
+
+```
+PlatformIO 라이브러리 종속성 찾기 도구는 프로젝트 소스 파일을 스캔하여 자동으로 종속 라이브러리를 찾습니다.
+
+PlatformIO 라이브러리 종속성 찾기 도구에 대한 자세한 정보:
+- https://docs.platformio.org/page/librarymanager/ldf.html
