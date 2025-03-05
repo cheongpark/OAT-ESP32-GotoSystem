@@ -74,7 +74,7 @@ BUILD_FLAGS = {
     "AZ_OPERATING_CURRENT_SETTING": "1",
     "FOCUS_MOTOR_CURRENT_RATING": "1",
     "FOCUS_OPERATING_CURRENT_SETTING": "1",
-    # Not all boards define the pins, so just hardcode it for compile testing
+    # 모든 보드가 핀을 정의하지 않으므로 컴파일 테스트를 위해 하드코딩
     "RA_HOMING_SENSOR_PIN": "1",
     "DEC_HOMING_SENSOR_PIN": "1",
     "RA_ENDSWITCH_EAST_SENSOR_PIN": "1",
@@ -202,8 +202,7 @@ SHORT_STRINGS = {
 def shorten(string):
     return SHORT_STRINGS[string] if string in SHORT_STRINGS else string
 
-
-# Define all possible parameters (boards and flags)
+# 모든 가능한 매개변수(보드 및 플래그) 정의
 def create_problem():
     problem = Problem()
     problem.addVariable("BOARD", BOARDS)
@@ -211,8 +210,7 @@ def create_problem():
         problem.addVariable(key, values)
     return problem
 
-
-# Set constraints to the problem based on supported features
+# 지원되는 기능에 대한 제약조건 설정
 def set_support_constraints(problem):
     def board_supports_flag_value(b, k, v):
         return v in BOARD_SUPPORT[b][k]
@@ -220,13 +218,13 @@ def set_support_constraints(problem):
     def board_support_constraint(expected_board, expected_flag):
         return lambda b, v: expected_board != b or board_supports_flag_value(b, expected_flag, v)
 
-    # Apply board-feature support constraints
+    # 보드-기능 지원 제약조건 적용
     for board, flags in BOARD_SUPPORT.items():
         for key, values in flags.items():
             constraint = board_support_constraint(board, key)
             problem.addConstraint(constraint, ["BOARD", key])
 
-    # Apply stepper-driver support constraints
+    # 스테퍼-드라이버 지원 제약조건 적용
     def driver_supports_stepper(d, s):
         return d in STEPPER_SUPPORT[s]
 
@@ -236,10 +234,9 @@ def set_support_constraints(problem):
     problem.addConstraint(driver_supports_stepper, ["AZ_DRIVER_TYPE", "AZ_STEPPER_TYPE"])
     problem.addConstraint(driver_supports_stepper, ["FOCUS_DRIVER_TYPE", "FOCUS_STEPPER_TYPE"])
 
-
-# Define constraints for excluded tests
+# 제외된 테스트에 대한 제약조건 정의
 def set_test_constraints(problem):
-    # Reduce amount of boards under test
+    # 테스트할 보드 수 줄이기
     # problem.addConstraint(InSetConstraint({"mega2560", "esp32", "mksgenlv21"}), ["BOARD"])
 
     problem.addConstraint(AllEqualConstraint(), [
@@ -360,17 +357,17 @@ def solve(board):
 
     copy_caches_to_executors(executor_list[0].proj_dir, executor_list[1:])
 
-    solutions_built = 2  # We've already built one solution, and we're 1-indexing
-    exit_early = False  # Exit trigger
+    solutions_built = 2  # 이미 하나의 솔루션을 빌드했고, 1부터 시작
+    exit_early = False  # 종료 트리거
     while solutions:
-        # First fill any open execution slots
+        # 먼저 열린 실행 슬롯 채우기
         while get_available_executor_idx(executor_list) is not None:
             available_executor_idx = get_available_executor_idx(executor_list)
             executor = executor_list[available_executor_idx]
             try:
                 solution = solutions.pop()
             except IndexError:
-                # No more solutions to try!
+                # 더 이상 시도할 솔루션 없음!
                 break
             print(f'[{solutions_built}/{total_solutions}] Building ...')
             executor.solution = copy.deepcopy(solution)
@@ -378,10 +375,10 @@ def solve(board):
             executor.proc = execute(executor.proj_dir, board, solution)
             solutions_built += 1
 
-        # Next wait for any processes to finish
+        # 다음으로 프로세스 완료 대기
         wait_for_executor_to_finish(executor_list)
 
-        # Go through all the finished processes and check their status
+        # 완료된 모든 프로세스의 상태 확인
         while get_finished_executor_idx(executor_list) is not None:
             finished_executor_idx = get_finished_executor_idx(executor_list)
             executor = executor_list[finished_executor_idx]

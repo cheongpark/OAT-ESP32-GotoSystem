@@ -1,5 +1,5 @@
 tabulate~=0.8.7
 python-constraint~=1.4.0
-# matrix_build.py also requires click, but platformio also requires click so we just let them pick the version
-# use the latest version of platformio, same as what a user would install
+# matrix_build.py는 click도 필요하지만 platformio도 click을 필요로 하므로 버전 선택은 맡깁니다
+# 사용자가 설치하는 것과 동일하게 platformio의 최신 버전을 사용합니다
 platformio

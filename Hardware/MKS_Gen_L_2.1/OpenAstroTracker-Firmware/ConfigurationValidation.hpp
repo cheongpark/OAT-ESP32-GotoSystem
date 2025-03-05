@@ -2,7 +2,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                            ////////
-// VALIDATE CONFIGURATION     ////////
+// 설정 검증                   ////////
 //                            ////////
 //////////////////////////////////////
 
@@ -16,25 +16,25 @@
     #error This firmware requires more recent configuration, visit https://config.openastrotech.com/
 #endif
 
-// Platform
+// 플랫폼
 #if defined(ESP32) || defined(__AVR_ATmega2560__)
-// Valid platform
+// 유효한 플랫폼
 #else
     #error Unsupported platform configuration. Use at own risk.
 #endif
 
-// Display & keypad configurations
+// 디스플레이 & 키패드 설정
 #if defined(ESP32) && ((DISPLAY_TYPE == DISPLAY_TYPE_NONE) || (DISPLAY_TYPE == DISPLAY_TYPE_LCD_JOY_I2C_SSD1306))
-// Valid display for ESP32
+// ESP32용 유효한 디스플레이
 #elif defined(__AVR_ATmega2560__)                                                                                                          \
     && ((DISPLAY_TYPE == DISPLAY_TYPE_NONE) || (DISPLAY_TYPE == DISPLAY_TYPE_LCD_KEYPAD) || (DISPLAY_TYPE_LCD_KEYPAD_I2C_MCP23008)         \
         || (DISPLAY_TYPE_LCD_KEYPAD_I2C_MCP23017))
-// Valid display for ATmega
+// ATmega용 유효한 디스플레이
 #else
     #error Unsupported display configuration. Use at own risk.
 #endif
 
-// Info Display validations
+// 정보 디스플레이 검증
 #if defined(__AVR_ATmega2560__)
     #if (INFO_DISPLAY_TYPE != INFO_DISPLAY_TYPE_NONE)
         #if (DISPLAY_TYPE != DISPLAY_TYPE_NONE)
@@ -50,22 +50,22 @@
 
 #if (RA_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
     #ifndef RA_DRIVER_ADDRESS
-        // Serial bus address must be specified for TMC2209 in UART mode
+        // UART 모드의 TMC2209에는 시리얼 버스 주소가 지정되어야 함
         #error RA driver address for DRIVER_TYPE_TMC2209_UART not specified.
     #endif
     #if (RA_UART_STEALTH_MODE != 0) && (RA_UART_STEALTH_MODE != 1)
-        // Stealth mode must be zero or 1
+        // 스텔스 모드는 0 또는 1이어야 함
         #error RA stealth mode must be 0 (off) or 1 (on)
     #endif
 #endif
 
 #if (DEC_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
     #ifndef DEC_DRIVER_ADDRESS
-        // Serial bus address must be specified for TMC2209 in UART mode
+        // UART 모드의 TMC2209에는 시리얼 버스 주소가 지정되어야 함
         #error DEC driver address for DRIVER_TYPE_TMC2209_UART not specified.
     #endif
     #if (DEC_UART_STEALTH_MODE != 0) && (DEC_UART_STEALTH_MODE != 1)
-        // Stealth mode must be zero or 1
+        // 스텔스 모드는 0 또는 1이어야 함
         #error DEC stealth mode must be 0 (off) or 1 (on)
     #endif
 #endif
@@ -75,17 +75,17 @@
 #endif
 
 #if (AZ_STEPPER_TYPE == STEPPER_TYPE_NONE)
-    // Baseline configuration without azimuth control is valid
+    // 방위각 제어가 없는 기본 설정은 유효함
     #if (AZ_DRIVER_TYPE == DRIVER_TYPE_NONE)
-    // Valid ALT stepper and driver combination
+    // 유효한 ALT 스테퍼와 드라이버 조합
     #else
         #error Defined an AZ driver, but no AZ stepper.
     #endif
 #elif defined(__AVR_ATmega2560__)
-    // Azimuth configuration
+    // 방위각 설정
     #if (AZ_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
         #ifndef AZ_DRIVER_ADDRESS
-            // Serial bus address must be specified for TMC2209 in UART mode
+            // UART 모드의 TMC2209에는 시리얼 버스 주소가 지정되어야 함
             #error AZ driver address for DRIVER_TYPE_TMC2209_UART not specified.
         #endif
     #endif
@@ -95,17 +95,17 @@
 #endif
 
 #if (ALT_STEPPER_TYPE == STEPPER_TYPE_NONE)
-    // Baseline configuration without altitude control is valid
+    // 고도 제어가 없는 기본 설정은 유효함
     #if (ALT_DRIVER_TYPE == DRIVER_TYPE_NONE)
-    // Valid ALT stepper and driver combination
+    // 유효한 ALT 스테퍼와 드라이버 조합
     #else
         #error Defined an ALT driver, but no ALT stepper.
     #endif
 #elif defined(__AVR_ATmega2560__)
-    // Altitude configuration
+    // 고도 설정
     #if (ALT_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
         #ifndef ALT_DRIVER_ADDRESS
-            // Serial bus address must be specified for TMC2209 in UART mode
+            // UART 모드의 TMC2209에는 시리얼 버스 주소가 지정되어야 함
             #error ALT driver address for DRIVER_TYPE_TMC2209_UART not specified.
         #endif
     #endif
@@ -115,17 +115,17 @@
 #endif
 
 #if (FOCUS_STEPPER_TYPE == STEPPER_TYPE_NONE)
-    // Baseline configuration without focus control is valid
+    // 초점 제어가 없는 기본 설정은 유효함
     #if (FOCUS_DRIVER_TYPE == DRIVER_TYPE_NONE)
-    // Valid Focus stepper and driver combination
+    // 유효한 초점 스테퍼와 드라이버 조합
     #else
         #error Defined an Focus driver, but no Focus stepper.
     #endif
 #elif defined(__AVR_ATmega2560__)
-    // Focus configuration
+    // 초점 설정
     #if (FOCUS_STEPPER_TYPE == DRIVER_TYPE_TMC2209_UART)
         #ifndef FOCUS_DRIVER_ADDRESS
-            // Serial bus address must be specified for TMC2209 in UART mode
+            // UART 모드의 TMC2209에는 시리얼 버스 주소가 지정되어야 함
             #error Focus driver address for DRIVER_TYPE_TMC2209_UART not specified.
         #endif
     #endif
@@ -135,14 +135,14 @@
 #endif
 
 #if (WIFI_ENABLED == 0)
-// Baseline configuration without WiFi is valid
+// WiFi가 없는 기본 설정은 유효함
 #elif defined(ESP32)
-    // Wifi is only supported on ESP32
+    // WiFi는 ESP32에서만 지원됨
     #if !defined(WIFI_HOSTNAME)
         #error Wifi hostname must be provided for infrastructure and AP modes
     #endif
     #if (WIFI_MODE == WIFI_MODE_DISABLED)
-    // Baseline configuration with disabled WiFi is valid
+    // WiFi가 비활성화된 기본 설정은 유효함
     #endif
     #if (WIFI_MODE == WIFI_MODE_INFRASTRUCTURE) || (WIFI_MODE == WIFI_MODE_ATTEMPT_INFRASTRUCTURE_FAIL_TO_AP)
         #if !defined(WIFI_INFRASTRUCTURE_MODE_SSID) || !defined(WIFI_INFRASTRUCTURE_MODE_WPAKEY)
@@ -159,33 +159,33 @@
     #error Unsupported WiFi configuration (WiFI only supported on ESP32). Use at own risk.
 #endif
 
-// External sensors
+// 외부 센서
 #if (USE_GPS == 0)
-// Baseline configuration without GPS is valid
+// GPS가 없는 기본 설정은 유효함
 #elif defined(ESP32) || defined(__AVR_ATmega2560__)
-// GPS is supported on ESP32 and ATmega
+// GPS는 ESP32와 ATmega에서 지원됨
 #else
     #error Unsupported GPS configuration. Use at own risk.
 #endif
 
 #if (USE_GYRO_LEVEL == 0)
-// Baseline configuration without gyro is valid
+// 자이로가 없는 기본 설정은 유효함
 #elif defined(ESP32) || defined(__AVR_ATmega2560__)
-// Gyro is supported on ESP32 and ATmega
+// 자이로는 ESP32와 ATmega에서 지원됨
 #else
     #error Unsupported gyro configuration. Use at own risk.
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                            ////////
-// VALIDATE PIN ASSIGNMENTS   ////////
+// 핀 할당 검증               ////////
 //                            ////////
 //////////////////////////////////////
 
-// Motor & driver configurations
+// 모터 & 드라이버 설정
 #if (DEC_DRIVER_TYPE == DRIVER_TYPE_A4988_GENERIC) || (DEC_DRIVER_TYPE == DRIVER_TYPE_TMC2209_STANDALONE)
     #if !defined(DEC_STEP_PIN) || !defined(DEC_DIR_PIN) || !defined(DEC_EN_PIN)
-        // Required pin assignments missing
+        // 필수 핀 할당 누락
         #error Missing pin assignments for configured DEC DRIVER_TYPE_A4988_GENERIC or DRIVER_TYPE_TMC2209_STANDALONE driver
     #endif
     #if (!defined(DEC_MS0_PIN) || !defined(DEC_MS1_PIN) || !defined(DEC_MS2_PIN))                                                          \
@@ -194,18 +194,18 @@
     #endif
 #elif (DEC_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
     #if !defined(DEC_STEP_PIN) || !defined(DEC_DIR_PIN) || !defined(DEC_EN_PIN) || !defined(DEC_DIAG_PIN)
-        // Required pin assignments missing
+        // 필수 핀 할당 누락
         #error Missing pin assignments for configured DEC DRIVER_TYPE_TMC2209_UART driver
     #endif
     #if !((defined(DEC_SERIAL_PORT_TX) && defined(DEC_SERIAL_PORT_RX)) || defined(DEC_SERIAL_PORT))
-        // Required pin assignments missing for UART serial
+        // UART 시리얼용 필수 핀 할당 누락
         #error Missing pin assignments for configured DEC DRIVER_TYPE_TMC2209_UART driver serial connection
     #endif
 #endif
 
 #if (RA_DRIVER_TYPE == DRIVER_TYPE_A4988_GENERIC) || (RA_DRIVER_TYPE == DRIVER_TYPE_TMC2209_STANDALONE)
     #if !defined(RA_STEP_PIN) || !defined(RA_DIR_PIN) || !defined(RA_EN_PIN)
-        // Required pin assignments missing
+        // 필수 핀 할당 누락
         #error Missing pin assignments for configured RA DRIVER_TYPE_A4988_GENERIC or DRIVER_TYPE_TMC2209_STANDALONE driver
     #endif
     #if (!defined(RA_MS0_PIN) || !defined(RA_MS1_PIN) || !defined(RA_MS2_PIN))                                                             \
@@ -214,11 +214,11 @@
     #endif
 #elif (RA_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
     #if !defined(RA_STEP_PIN) || !defined(RA_DIR_PIN) || !defined(RA_EN_PIN) || !defined(RA_DIAG_PIN)
-        // Required pin assignments missing
+        // 필수 핀 할당 누락
         #error Missing pin assignments for configured RA DRIVER_TYPE_TMC2209_UART driver
     #endif
     #if !((defined(RA_SERIAL_PORT_TX) && defined(RA_SERIAL_PORT_RX)) || defined(RA_SERIAL_PORT))
-        // Required pin assignments missing for UART serial
+        // UART 시리얼용 필수 핀 할당 누락
         #error Missing pin assignments for configured RA DRIVER_TYPE_TMC2209_UART driver serial connection
     #endif
 #endif
@@ -226,16 +226,16 @@
 #if (AZ_STEPPER_TYPE != STEPPER_TYPE_NONE)
     #if (AZ_DRIVER_TYPE == DRIVER_TYPE_A4988_GENERIC) || (AZ_DRIVER_TYPE == DRIVER_TYPE_TMC2209_STANDALONE)
         #if !defined(AZ_STEP_PIN) || !defined(AZ_DIR_PIN) || !defined(AZ_EN_PIN) || !defined(AZ_DIAG_PIN)
-            // Required pin assignments missing
+            // 필수 핀 할당 누락
             #error Missing pin assignments for configured AZ DRIVER_TYPE_A4988_GENERIC or DRIVER_TYPE_TMC2209_STANDALONE driver
         #endif
     #elif (AZ_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
         #if !defined(AZ_STEP_PIN) || !defined(AZ_DIR_PIN) || !defined(AZ_EN_PIN) || !defined(AZ_DIAG_PIN)
-            // Required pin assignments missing (ATmega uses SoftwareSerial for this driver)
+            // 필수 핀 할당 누락 (ATmega는 이 드라이버에 SoftwareSerial 사용)
             #error Missing pin assignments for configured AZ DRIVER_TYPE_TMC2209_UART driver
         #endif
         #if !((defined(AZ_SERIAL_PORT_TX) && defined(AZ_SERIAL_PORT_RX)) || defined(AZ_SERIAL_PORT))
-            // Required pin assignments missing for UART serial
+            // UART 시리얼용 필수 핀 할당 누락
             #error Missing pin assignments for configured AZ DRIVER_TYPE_TMC2209_UART driver serial connection
         #endif
     #endif
@@ -244,16 +244,16 @@
 #if (ALT_STEPPER_TYPE != STEPPER_TYPE_NONE)
     #if (ALT_DRIVER_TYPE == DRIVER_TYPE_A4988_GENERIC) || (ALT_DRIVER_TYPE == DRIVER_TYPE_TMC2209_STANDALONE)
         #if !defined(ALT_STEP_PIN) || !defined(ALT_DIR_PIN) || !defined(ALT_EN_PIN) || !defined(ALT_DIAG_PIN)
-            // Required pin assignments missing
+            // 필수 핀 할당 누락
             #error Missing pin assignments for configured AZ DRIVER_TYPE_A4988_GENERIC or DRIVER_TYPE_TMC2209_STANDALONE driver
         #endif
     #elif (ALT_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
         #if !defined(ALT_STEP_PIN) || !defined(ALT_DIR_PIN) || !defined(ALT_EN_PIN) || !defined(ALT_DIAG_PIN)
-            // Required pin assignments missing (ATmega uses SoftwareSerial for this driver)
+            // 필수 핀 할당 누락 (ATmega는 이 드라이버에 SoftwareSerial 사용)
             #error Missing pin assignments for configured ALT DRIVER_TYPE_TMC2209_UART driver
         #endif
         #if !((defined(ALT_SERIAL_PORT_TX) && defined(ALT_SERIAL_PORT_RX)) || defined(ALT_SERIAL_PORT))
-            // Required pin assignments missing for UART serial
+            // UART 시리얼용 필수 핀 할당 누락
             #error Missing pin assignments for configured ALT DRIVER_TYPE_TMC2209_UART driver serial connection
         #endif
     #endif
@@ -262,51 +262,51 @@
 #if (FOCUS_STEPPER_TYPE != STEPPER_TYPE_NONE)
     #if (FOCUS_DRIVER_TYPE == DRIVER_TYPE_A4988_GENERIC) || (FOCUS_DRIVER_TYPE == DRIVER_TYPE_TMC2209_STANDALONE)
         #if !defined(FOCUS_STEP_PIN) || !defined(FOCUS_DIR_PIN) || !defined(FOCUS_EN_PIN)
-            // Required pin assignments missing
+            // 필수 핀 할당 누락
             #error Missing pin assignments for configured Focuser DRIVER_TYPE_A4988_GENERIC or DRIVER_TYPE_TMC2209_STANDALONE driver
         #endif
     #elif (FOCUS_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
         #if !defined(FOCUS_STEP_PIN) || !defined(FOCUS_DIR_PIN) || !defined(FOCUS_EN_PIN)
-            // Required pin assignments missing (ATmega uses SoftwareSerial for this driver)
+            // 필수 핀 할당 누락 (ATmega는 이 드라이버에 SoftwareSerial 사용)
             #error Missing pin assignments for configured Focuser DRIVER_TYPE_TMC2209_UART driver
         #endif
         #if !((defined(FOCUS_SERIAL_PORT_TX) && defined(FOCUS_SERIAL_PORT_RX)) || defined(FOCUS_SERIAL_PORT))
-            // Required pin assignments missing for UART serial
+            // UART 시리얼용 필수 핀 할당 누락
             #error Missing pin assignments for configured Focuser DRIVER_TYPE_TMC2209_UART driver serial connection
         #endif
     #endif
 #endif
 
-// Displays
+// 디스플레이
 #if (DISPLAY_TYPE == DISPLAY_TYPE_NONE) || (DISPLAY_TYPE == DISPLAY_TYPE_LCD_KEYPAD_I2C_MCP23008)                                          \
     || (DISPLAY_TYPE == DISPLAY_TYPE_LCD_KEYPAD_I2C_MCP23017)
-// No dedicated pins required apart from I2C
+// I2C 외에 전용 핀이 필요하지 않음
 #elif (DISPLAY_TYPE == DISPLAY_TYPE_LCD_KEYPAD)
     #if !defined(LCD_PIN4) || !defined(LCD_PIN5) || !defined(LCD_PIN6) || !defined(LCD_PIN7) || !defined(LCD_PIN8) || !defined(LCD_PIN9)
-        // Required pin assignments missing
+        // 필수 핀 할당 누락
         #error Missing pin assignments for configured DISPLAY_TYPE_LCD_KEYPAD display
     #endif
 #elif (DISPLAY_TYPE == DISPLAY_TYPE_LCD_JOY_I2C_SSD1306)
-// No dedicated pins required apart from I2C for display
+// 디스플레이용 I2C 외에 전용 핀이 필요하지 않음
 #endif
 
-// Keypad
+// 키패드
 #if (DISPLAY_TYPE == DISPLAY_TYPE_NONE) || (DISPLAY_TYPE == DISPLAY_TYPE_LCD_KEYPAD_I2C_MCP23008)                                          \
     || (DISPLAY_TYPE == DISPLAY_TYPE_LCD_KEYPAD_I2C_MCP23017)
-// No dedicated pins required apart from I2C
+// I2C 외에 전용 핀이 필요하지 않음
 #elif (DISPLAY_TYPE == DISPLAY_TYPE_LCD_KEYPAD)
     #if !defined(LCD_KEY_SENSE_PIN)
-        // Required pin assignments missing
+        // 필수 핀 할당 누락
         #error Missing sense pin assignment for configured DISPLAY_TYPE_LCD_KEYPAD keypad
     #endif
 #elif (DISPLAY_TYPE == DISPLAY_TYPE_LCD_JOY_I2C_SSD1306)
     #if !defined(LCD_KEY_SENSE_X_PIN) || !defined(LCD_KEY_SENSE_Y_PIN) || !defined(LCD_KEY_SENSE_PUSH_PIN)
-        // Required pin assignments missing
+        // 필수 핀 할당 누락
         #error Missing sense pin assignments for configured DISPLAY_TYPE_LCD_JOY_I2C_SSD1306 joystick
     #endif
 #endif
 
-// Debugging
+// 디버깅
 #if DEBUG_SEPARATE_SERIAL == 1
     #if !defined(DEBUG_SERIAL_PORT)
         #error Missing serial port assignment for external debugging
@@ -315,7 +315,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                ////////
-// VALIDATE CRITICAL PARAMETERS   ////////
+// 중요 매개변수 검증            ////////
 //                                ////////
 //////////////////////////////////////////
 
@@ -449,7 +449,7 @@
     #endif
 #endif
 
-// For OAT, we must have DEC limits defined, otherwise free slew does nto work.
+// OAT의 경우 자유 슬루가 작동하려면 DEC 한계가 정의되어 있어야 함
 #ifndef OAM
     #ifndef DEC_LIMIT_UP
         #error "You must set DEC_LIMIT_UP to the number of degrees that your OAT can move upwards from the home position."

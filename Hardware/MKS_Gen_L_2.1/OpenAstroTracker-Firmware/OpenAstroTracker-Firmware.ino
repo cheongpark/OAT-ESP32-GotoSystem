@@ -1,14 +1,14 @@
 /*
   =======================================================================================================================================
 
-    Version 1.8
+    버전 1.8
 
-    1. Connect your Arduino, under tools choose the board you're using (e.g. Arduino Mega), set the right Port and set "Arduino ISP" as the Programmer.
-    2. Hit upload (Ctrl-U)
+    1. Arduino를 연결하고, 도구에서 사용 중인 보드(예: Arduino Mega)를 선택하고, 올바른 포트를 설정한 다음 프로그래머로 "Arduino ISP"를 설정하세요.
+    2. 업로드(Ctrl-U)를 누르세요.
 
-    You might need to download the "AccelStepper" library by Mike McCauley
+    Mike McCauley의 "AccelStepper" 라이브러리를 다운로드해야 할 수도 있습니다.
 
-    Authors: /u/intercipere
+    작성자: /u/intercipere
              /u/clutchplate
              /u/EorEquis
 

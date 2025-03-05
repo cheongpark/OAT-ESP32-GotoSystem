@@ -1,6 +1,6 @@
-// Version number must have only two digits maximum at each of the three locations.
-// So 1.8.99 is ok, but 1.8.234 is not. Neither is 1.123.22
-// Also, numbers are interpreted as simple numbers.                        _   __   _
-// So 1.8 is actually 1.08, meaning that 1.12 is a later version than 1.8.  \_(..)_/
+// 버전 번호는 세 위치 각각에서 최대 두 자리 숫자만 가능합니다.
+// 예를 들어 1.8.99는 괜찮지만 1.8.234나 1.123.22는 안됩니다.
+// 또한 숫자는 단순 숫자로 해석됩니다.                                    _   __   _
+// 즉 1.8은 실제로 1.08이므로 1.12가 1.8보다 더 최신 버전입니다.           \_(..)_/
 
 #define VERSION "V1.13.13"

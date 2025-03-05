@@ -40,11 +40,11 @@ def only_changed_non_fw_files(refspec: str) -> bool:
     index = repo.index
     origin_develop_commit = repo.commit(refspec)
 
-    # index vs working copy (unstaged files)
+    # 작업 복사본에 대한 인덱스 (스테이징되지 않은 파일들)
     changed_but_not_staged = [item.a_path for item in index.diff(None)]
-    # index vs current HEAD tree (staged files)
+    # 현재 HEAD 트리에 대한 인덱스 (스테이징된 파일들)
     changed_and_staged = [item.a_path for item in index.diff('HEAD')]
-    # origin vs current HEAD tree (files changed in the branch)
+    # 현재 HEAD 트리에 대한 origin (브랜치에서 변경된 파일들)
     branch_files_changed = [item.a_path for item in origin_develop_commit.diff('HEAD')]
 
     print(f'Unstaged changes: {changed_but_not_staged}')
@@ -55,19 +55,19 @@ def only_changed_non_fw_files(refspec: str) -> bool:
     print(f'Total changed files: {all_changed_filenames}')
 
     non_fw_globs = [
-        # non-build Python scripts (pre/post Platformio scripts still affect the build process)
+        # 빌드와 관련없는 Python 스크립트 (pre/post Platformio 스크립트는 여전히 빌드 프로세스에 영향을 미침)
         'matrix_build*.py', 'version_check.py', 'scripts/MeadeCommandParser.py',
-        # prose text files
+        # 텍스트 파일들
         '*.md', 'LICENSE', '.mailmap',
-        # build system
+        # 빌드 시스템
         '.github/*.yml', 'requirements_*.txt',
-        # misc tooling files
+        # 기타 도구 파일들
         '.gitignore', '.git-blame-ignore-revs',
     ]
     for changed_filename in all_changed_filenames:
         if not any(fnmatch.fnmatch(changed_filename, non_fw_glob) for non_fw_glob in non_fw_globs):
-            # If the changed file isn't a non-FW file (==> is a FW file)
-            # then we need to do the full version check
+            # 변경된 파일이 non-FW 파일이 아닌 경우 (==> FW 파일인 경우)
+            # 전체 버전 체크를 수행해야 함
             print(f"Changed file {changed_filename} will affect firmware ({non_fw_globs})")
             return False
     return True
@@ -134,24 +134,24 @@ def main():
         print('No FW files changed, not checking version.')
         return
     version_header_path = './Version.h'
-    # Get the current version from the header
+    # 헤더에서 현재 버전 가져오기
     print(f'Checking current header version from {version_header_path}')
     with open(version_header_path, 'r') as fp:
         version_header_contents = fp.read()
         header_version = get_header_version(version_header_contents)
 
-    # Get the previous version (using git)
+    # 이전 버전 가져오기 (git 사용)
     previous_header_version = get_previous_header_version(version_header_path, args.branchspec)
 
-    # Check that the version has been increased
+    # 버전이 증가했는지 확인
     if header_version <= previous_header_version:
         die(f'Header version must be greater than the previous version {header_version} <= {previous_header_version}')
 
     changelog_markdown_path = './Changelog.md'
-    # Get a string from the changelog, should have a version in the latest entry
+    # changelog에서 문자열 가져오기, 최신 항목에 버전이 있어야 함
     changelog_version = get_changelog_version(changelog_markdown_path)
 
-    # Check that the header and the changelog match
+    # 헤더와 changelog가 일치하는지 확인
     if str(header_version).lower() not in changelog_version.lower():
         die(f'Header version ("{header_version}" in {version_header_path}) does \
 not match changelog version ("{changelog_version}" in {changelog_markdown_path})')

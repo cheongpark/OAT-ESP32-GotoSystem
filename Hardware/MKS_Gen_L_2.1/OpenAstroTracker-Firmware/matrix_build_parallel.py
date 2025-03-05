@@ -1,7 +1,6 @@
 """
-Module where all functionality that purely relates to how we parallelize matrix_build.py
-should live. It's not a perfect split of course, but it helps to separate the 'matrix'
-logic from the 'how we build' logic.
+matrix_build.py를 병렬화하는 방법과 관련된 모든 기능이 있는 모듈입니다.
+완벽한 분리는 아니지만, '매트릭스' 로직과 '빌드 방법' 로직을 분리하는 데 도움이 됩니다.
 """
 import os
 import shutil
@@ -16,15 +15,15 @@ from dataclasses import dataclass
 @dataclass
 class Executor:
     """
-    Core data that defines a solution that is being built
+    빌드 중인 솔루션을 정의하는 핵심 데이터
     """
-    # The directory where we are building the solution
+    # 솔루션을 빌드하는 디렉토리
     proj_dir: Path
-    # The solution dictionary
+    # 솔루션 딕셔너리
     solution: Optional[dict] = None
-    # The process building the solution
+    # 솔루션을 빌드하는 프로세스
     proc: Optional[subprocess.Popen] = None
-    # Object that holds tempdir data, so that it can be cleaned up later
+    # 나중에 정리할 수 있도록 tempdir 데이터를 보관하는 객체
     tempdir_obj: Optional[tempfile.TemporaryDirectory] = None
 
 
@@ -40,13 +39,13 @@ def generate_config_file(project_location: Path, flag_values: dict):
 
 def execute(project_location: Path, board: str, flag_values: dict, jobs: int = 1, out_pipe=True) -> subprocess.Popen:
     """
-    Start up an executor that is building a solution
-    :param project_location: The directory where to build the solution
-    :param board: The board type (aka environment)
-    :param flag_values: Dictionary of #defines to create a config file from
-    :param jobs: How many jobs the build process should use
-    :param out_pipe: If the executor's stdout/stderr should be pipes
-    :return: Process object that is executing the solution
+    솔루션을 빌드하는 실행기를 시작
+    :param project_location: 솔루션을 빌드할 디렉토리
+    :param board: 보드 유형(환경)
+    :param flag_values: 설정 파일을 생성할 #define 딕셔너리
+    :param jobs: 빌드 프로세스가 사용할 작업 수
+    :param out_pipe: 실행기의 stdout/stderr를 파이프로 할지 여부
+    :return: 솔루션을 실행하는 프로세스 객체
     """
     build_env = dict(os.environ)
     build_env["PLATFORMIO_BUILD_FLAGS"] = "-DMATRIX_LOCAL_CONFIG=1"
@@ -69,9 +68,9 @@ def execute(project_location: Path, board: str, flag_values: dict, jobs: int = 1
 
 def get_available_executor_idx(e_list: List[Executor]) -> Optional[int]:
     """
-    Get the index of an idle executor
-    :param e_list: List of executors
-    :return: Idle executor index, else None if all are busy
+    유휴 실행기의 인덱스 가져오기
+    :param e_list: 실행기 목록
+    :return: 유휴 실행기 인덱스, 모두 사용 중이면 None
     """
     for i, executor in enumerate(e_list):
         if executor.proc is None:
@@ -81,9 +80,9 @@ def get_available_executor_idx(e_list: List[Executor]) -> Optional[int]:
 
 def get_finished_executor_idx(e_list: List[Executor]) -> Optional[int]:
     """
-    Get the index of a finished executor
-    :param e_list: List of executors
-    :return: Finished executor index, else None if all are busy
+    완료된 실행기의 인덱스 가져오기
+    :param e_list: 실행기 목록
+    :return: 완료된 실행기 인덱스, 모두 사용 중이면 None
     """
     for i, executor in enumerate(e_list):
         if executor.proc is not None and executor.proc.poll() is not None:
@@ -93,8 +92,8 @@ def get_finished_executor_idx(e_list: List[Executor]) -> Optional[int]:
 
 def cleanup_tempdirs(e_list: List[Executor]):
     """
-    Delete all the temporary directories that executors were using
-    :param e_list: List of executors
+    실행기가 사용한 모든 임시 디렉토리 삭제
+    :param e_list: 실행기 목록
     """
     for executor in e_list:
         if executor.tempdir_obj is not None:
@@ -105,11 +104,10 @@ def cleanup_tempdirs(e_list: List[Executor]):
 
 def create_executors(num_executors: int, local_paths_to_link: List[Path]) -> List[Executor]:
     """
-    Create a number of executors and their associated temporary directories, then
-    soft-link all needed project files
-    :param num_executors: Number of executors to create
-    :param local_paths_to_link: List of files to soft-link into the executor projects
-    :return: List of executors
+    실행기와 관련 임시 디렉토리를 생성하고 필요한 모든 프로젝트 파일을 소프트 링크
+    :param num_executors: 생성할 실행기 수
+    :param local_paths_to_link: 소프트 링크할 파일 목록
+    :return: 실행기 목록
     """
     executor_list: List[Executor] = []
     print(f'Creating {num_executors} executors')
@@ -128,9 +126,9 @@ def create_executors(num_executors: int, local_paths_to_link: List[Path]) -> Lis
 
 def copy_caches_to_executors(src_proj_dir: Path, dst_executors: List[Executor]):
     """
-    Copy cache directories from a source directory to a number of executor project directories
-    :param src_proj_dir: Directory to copy from
-    :param dst_executors: List of executors to copy to
+    소스 디렉토리에서 여러 실행기 프로젝트 디렉토리로 캐시 디렉토리 복사
+    :param src_proj_dir: 복사할 소스 디렉토리
+    :param dst_executors: 복사할 실행기 목록
     """
     print('Copying caches to other executors')
     dir_names_to_copy = ['.pio', 'build_cache']
@@ -143,13 +141,13 @@ def copy_caches_to_executors(src_proj_dir: Path, dst_executors: List[Executor]):
 
 def get_source_files_to_link() -> List[Path]:
     """
-    Create a list of the important files from the local project. I didn't want to
-    use git here, since that might not pick up untracked (but needed) files.
-    :return: List of source files that a project needs in order to compile
+    로컬 프로젝트의 중요 파일 목록 생성. 추적되지 않은(하지만 필요한) 파일을 놓칠 수 있으므로
+    여기서는 git을 사용하지 않았습니다.
+    :return: 컴파일에 필요한 소스 파일 목록
     """
     local_proj_path = Path('.')
     venv_dirs = list(local_proj_path.glob('*venv*/'))
-    # Don't link the .pio directory because the builds need to be independent
+    # 빌드가 독립적이어야 하므로 .pio 디렉토리는 링크하지 않음
     pio_dirs = list(local_proj_path.glob('*.pio*/'))
     cmake_dirs = list(local_proj_path.glob('*cmake-build*/'))
 
@@ -176,18 +174,18 @@ def get_source_files_to_link() -> List[Path]:
 
 def wait_for_executor_to_finish(executor_list: List[Executor], timeout=0.1, poll_time=0.2):
     """
-    Block until an executor has finished building
-    :param executor_list: List of executors
-    :param timeout: Time to communicate() with the running process (kind of a hack)
-    :param poll_time: Time to wait before checking all executors again
+    실행기가 빌드를 완료할 때까지 대기
+    :param executor_list: 실행기 목록
+    :param timeout: 실행 중인 프로세스와 통신할 시간(일종의 해킹)
+    :param poll_time: 모든 실행기를 다시 확인하기 전 대기 시간
     """
     while get_finished_executor_idx(executor_list) is None:
         for e in executor_list:
             if e.proc is not None and e.proc.poll() is None:
-                # Communicate with the running processes to stop them from blocking
-                # (i.e. they spew too much output)
+                # 실행 중인 프로세스가 차단되지 않도록 통신
+                # (즉, 출력이 너무 많음)
                 try:
                     _ = e.proc.communicate(timeout=timeout)
                 except subprocess.TimeoutExpired:
-                    pass  # This is expected and what should happen
+                    pass  # 예상되고 발생해야 하는 상황
         time.sleep(poll_time)

@@ -11,14 +11,14 @@ def cprint(*args, **kwargs):
 
 def clean_up_patched_files(*_, **__):
     """
-    Removes all temporary patched files created previously in the build process
+    빌드 프로세스에서 이전에 생성된 모든 임시 패치 파일을 제거합니다
     """
-    # patch_path_key needs to be kept in sync with pre_script_patch_debug.py
-    # We put the current directory name in the key so that we only remove
-    # patched files that we know were built by the current build process.
-    # This is only useful in safeguarding against multiple builds being done in
-    # different directories at the same time. (i.e. we don't want to remove another
-    # processes' files while they are still in use)
+    # patch_path_key는 pre_script_patch_debug.py와 동기화되어야 합니다
+    # 현재 디렉토리 이름을 키에 넣어서 현재 빌드 프로세스에서 생성된 
+    # 패치 파일만 제거하도록 합니다.
+    # 이는 서로 다른 디렉토리에서 동시에 여러 빌드가 실행될 때 
+    # 안전장치로만 유용합니다. (즉, 다른 프로세스의 파일이 사용 중일 때 
+    # 해당 파일을 제거하지 않도록 합니다)
     project_dir_name = Path.cwd().name
     patch_path_key = f'_{project_dir_name}_patched_'
     tempdir_path = tempfile.gettempdir()

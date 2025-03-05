@@ -1,11 +1,11 @@
 """
-Helper script for parsingt the header file of MEADE
+MEADE 헤더 파일을 파싱하기 위한 도우미 스크립트
 
-USAGE:
- - Ensure you have a Python interperter working for VSCode
- - Execute this file by pressing the little green "Play" button in the top-right corner
- - Output will be written to "./scripts/MeadeToWikiOutput.txt" directory
- - Copy entire content of the file and paste it on the wiki page
+사용법:
+ - VSCode용 Python 인터프리터가 작동하는지 확인하세요
+ - 오른쪽 상단의 작은 녹색 "재생" 버튼을 눌러 이 파일을 실행하세요
+ - 출력은 "./scripts/MeadeToWikiOutput.txt" 디렉토리에 작성됩니다
+ - 파일의 전체 내용을 복사하여 위키 페이지에 붙여넣으세요
 """
 
 import os
@@ -125,7 +125,7 @@ def check_command_sepparator(line):
 
 
 # ***************************************************************
-# PARSE MEADE COMMANDS
+# 미드 명령 파싱
 # ***************************************************************
 
 # Meade cpp File

@@ -1,18 +1,16 @@
 #pragma once
 
 /**
- * This file contains advanced configurations. Edit values here only if you know what you are doing. Invalid values
- * can lead to OAT misbehaving very bad and in worst case could even lead to hardware damage. The default values here
- * were chosen after many tests and can are currently concidered to work the best.
+ * 이 파일은 고급 설정을 포함하고 있습니다. 이곳의 값을 수정하려면 충분한 지식이 있어야 합니다. 잘못된 값은 OAT의 심각한 오작동을 초래할 수 있으며, 최악의 경우 하드웨어 손상으로 이어질 수 있습니다. 여기의 기본 값은 여러 테스트 후에 선택되었으며 현재 최적의 작동을 보장합니다.
  * 
  * 
- *         YOU SHOULD NOT NEED TO EDIT THIS FILE!
+ *         이 파일을 수정할 필요가 없습니다!
  *         --------------------------------------
  **/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                            ////////
-// Misc Configuration         ////////
+// 기타 설정                   ////////
 //                            ////////
 //////////////////////////////////////
 #if !defined(USE_DUMMY_EEPROM)
@@ -24,11 +22,11 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                            ////////
-// MOTOR & DRIVER SETTINGS    ////////
+// 모터 및 드라이버 설정        ////////
 //                            ////////
 //////////////////////////////////////
 //
-// This is how many steps your stepper needs for a full rotation.
+// 스테퍼가 한 바퀴 회전하는 데 필요한 스텝 수입니다.
 #ifndef RA_STEPPER_SPR
     #define RA_STEPPER_SPR 400  // NEMA 0.9° = 400  |  NEMA 1.8° = 200
 #endif
@@ -49,12 +47,11 @@
     #define DEC_STEPPER_ACCELERATION 6000
 #endif
 
-// MICROSTEPPING
-// The DRIVER_TYPE_TMC2209_UART driver can dynamically switch between microstep settings.
-// All other drivers are set by the MS pins, therefore values here must match pin strapping.
-// Valid values: 1, 2, 4, 8, 16, 32, 64, 128, 256
-// !! Ensure the value corresponds to the specific driver capabilities and the correct MS pin configuration
-//
+// 마이크로스테핑
+// DRIVER_TYPE_TMC2209_UART 드라이버는 마이크로스텝 설정을 동적으로 전환할 수 있습니다.
+// 다른 모든 드라이버는 MS 핀에 의해 설정되므로 여기의 값은 핀 스트래핑과 일치해야 합니다.
+// 유효한 값: 1, 2, 4, 8, 16, 32, 64, 128, 256
+// !! 값이 특정 드라이버의 기능과 올바른 MS 핀 구성에 해당하는지 확인하십시오
 #if (RA_DRIVER_TYPE == DRIVER_TYPE_TMC2209_UART)
     #ifndef RA_SLEW_MICROSTEPPING
         #define RA_SLEW_MICROSTEPPING 8  // The (default) microstep mode used for slewing RA axis
@@ -144,10 +141,9 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                        ////////
-// MECHANICS SETTINGS     ////////
+// 기계 설정              ////////
 //                        ////////
 //////////////////////////////////
-//
 
 // the pitch of the GT2 timing belt
 #define GT2_BELT_PITCH 2.0f  // mm
@@ -188,20 +184,20 @@
     #define DEC_SLEWING_ACCELERATION_DEG 4.0f  // deg/s/s
 #endif
 
-// RA movement:
-// The radius of the surface that the belt runs on (in V1 of the ring) was 168.24mm.
-// Belt moves 40mm for one stepper revolution (2mm pitch, 20 teeth).
-// RA wheel is 2 x PI x 168.24mm (V2:180mm) circumference = 1057.1mm (V2:1131mm)
-// One RA revolution needs 26.43 (1057.1mm / 40mm) stepper revolutions (V2: 28.27 (1131mm/40mm))
-// Which means 108245 steps (26.43 x 4096) moves 360 degrees (V2: 115812 steps (28.27 x 4096))
-// So there are 300.1 steps/degree (108245 / 360)  (V2: 322 (115812 / 360))
-// Theoretically correct RA tracking speed is 1.246586 (300 x 14.95903 / 3600) (V2 : 1.333800 (322 x 14.95903 / 3600) steps/sec (this is for 20T)
-// Include microstepping ratio here such that steps/sec is updates/sec to stepper driver
+// RA 움직임:
+// 벨트가 움직이는 표면의 반지름(V1 링에서)은 168.24mm였습니다.
+// 벨트는 스테퍼 모터가 한 바퀴 회전할 때 40mm 이동합니다(2mm 피치, 20 이빨).
+// RA 휠은 2 x PI x 168.24mm (V2:180mm) 둘레 = 1057.1mm (V2:1131mm)
+// 한 번의 RA 회전에는 26.43 (1057.1mm / 40mm) 스테퍼 회전이 필요합니다 (V2: 28.27 (1131mm/40mm))
+// 이는 108245 스텝 (26.43 x 4096)이 360도를 이동한다는 것을 의미합니다 (V2: 115812 스텝 (28.27 x 4096))
+// 따라서 각도당 300.1 스텝이 있습니다 (108245 / 360)  (V2: 322 (115812 / 360))
+// 이론적으로 올바른 RA 추적 속도는 1.246586 (300 x 14.95903 / 3600) (V2 : 1.333800 (322 x 14.95903 / 3600) 스텝/초 (20T 기준)
+// 여기서 마이크로스테핑 비율을 포함하여 스텝/초가 스테퍼 드라이버에 대한 업데이트/초가 되도록 합니다
 #ifndef RA_STEPS_PER_DEGREE
     #define RA_STEPS_PER_DEGREE (RA_TRANSMISSION * RA_STEPPER_SPR * RA_SLEW_MICROSTEPPING / 360.0f)
 #endif
 
-// RA limits
+// RA 제한
 #ifndef RA_LIMIT_LEFT
     #define RA_LIMIT_LEFT 5.0f
 #endif
@@ -220,13 +216,13 @@
     #define DEC_TRANSMISSION (DEC_WHEEL_CIRCUMFERENCE / (DEC_PULLEY_TEETH * GT2_BELT_PITCH))
 #endif
 
-// DEC movement:
-// Belt moves 40mm for one stepper revolution (2mm pitch, 20 teeth).
-// DEC wheel is 2 x PI x 90mm circumference which is 565.5mm
-// One DEC revolution needs 14.13 (565.5mm/40mm) stepper revolutions
-// Which means 57907 steps (14.14 x 4096) moves 360 degrees
-// So there are 160.85 steps/degree (57907/360) (this is for 20T)
-// Include microstepping ratio here such that steps/sec is updates/sec to stepper driver
+// DEC 움직임:
+// 벨트는 스테퍼 모터가 한 바퀴 회전할 때 40mm 이동합니다(2mm 피치, 20 이빨).
+// DEC 휠은 2 x PI x 90mm 둘레로 565.5mm입니다
+// 한 번의 DEC 회전에는 14.13 (565.5mm/40mm) 스테퍼 회전이 필요합니다
+// 이는 57907 스텝 (14.14 x 4096)이 360도를 이동한다는 것을 의미합니다
+// 따라서 각도당 160.85 스텝이 있습니다 (57907/360) (20T 기준)
+// 여기서 마이크로스테핑 비율을 포함하여 스텝/초가 스테퍼 드라이버에 대한 업데이트/초가 되도록 합니다
 #ifndef DEC_STEPS_PER_DEGREE
     #define DEC_STEPS_PER_DEGREE (DEC_TRANSMISSION * DEC_STEPPER_SPR * DEC_SLEW_MICROSTEPPING / 360.0f)
 #endif
@@ -248,10 +244,10 @@
 
 ////////////////////////////
 //
-// GUIDE SETTINGS
-// This is the multiplier of the normal tracking speed that a guiding pulse will have.
-// Note that the North & South (DEC) tracking speed is calculated as the +multiplier & -multiplier
-// Note that the West & East (RA) tracking speed is calculated as the (multiplier+1.0) & (multiplier-1.0)
+// 가이드 설정
+// 이는 가이드 펄스가 가지는 일반 추적 속도의 배수입니다.
+// 북쪽 및 남쪽(DEC) 추적 속도는 +배수 및 -배수로 계산됩니다
+// 서쪽 및 동쪽(RA) 추적 속도는 (배수+1.0) 및 (배수-1.0)로 계산됩니다
 #ifndef RA_PULSE_MULTIPLIER
     #define RA_PULSE_MULTIPLIER 1.5f
 #endif
@@ -261,8 +257,8 @@
 
 ////////////////////////////
 //
-// INVERT AXIS
-// Set to 1 or 0 to invert motor directions
+// 축 반전
+// 모터 방향을 반전하려면 1 또는 0으로 설정하세요
 #ifndef RA_INVERT_DIR
     #define RA_INVERT_DIR 0
 #endif
@@ -278,33 +274,33 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                  ////////
-// LCD SETTINGS     ////////
+// LCD 설정         ////////
 //                  ////////
 ////////////////////////////
 //
-// UPDATE TIME
-// Time in ms between LCD screen updates during slewing operations
+// 업데이트 시간
+// 슬루잉 작업 중 LCD 화면 업데이트 간격(ms)
 #define DISPLAY_UPDATE_TIME 200
 
 ////////////////////////////
 //
-// LCD BUTTON TEST
-// Set this to 1 to run a key diagnostic. No tracker functions are on at all.
+// LCD 버튼 테스트
+// 키 진단을 실행하려면 1로 설정하세요. 모든 추적기 기능이 비활성화됩니다.
 #ifndef LCD_BUTTON_TEST
     #define LCD_BUTTON_TEST 0
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                     ///
-// HARDWARE EXTENSIONS SUPPORT SECTION ///
+// 하드웨어 확장 지원 섹션              ///
 //                                     ///
 //////////////////////////////////////////
 //
-// Backwards compatability. V1.9.07 changed from combined Azimuth/Altitude addon to seperate controls for each
+// 하위 호환성. V1.9.07부터 방위각/고도 애드온이 각각의 개별 제어로 변경되었습니다.
 //
 
 //////////////////////////////////////////
-// AutoPA AZIMUTH support
+// AutoPA 방위각 지원
 //////////////////////////////////////////
 #ifdef AZIMUTH_ALTITUDE_MOTORS
     #if AZIMUTH_ALTITUDE_MOTORS == 1
@@ -314,9 +310,9 @@
 #endif
 
 //////////////////////////////////////////
-// AutoPA AZIMUTH support
+// AutoPA 방위각 지원
 //////////////////////////////////////////
-// Enable Azimuth motor functionality in your local Configuration. Do not edit here!
+// 방위각 모터 기능을 로컬 설정에서 활성화하세요. 여기서는 수정하지 마세요!
 #if AZ_STEPPER_TYPE != STEPPER_TYPE_NONE
     #ifndef AZ_MICROSTEPPING
         #define AZ_MICROSTEPPING 64
@@ -365,9 +361,9 @@
 #endif
 
 //////////////////////////////////////////
-// AutoPA ALTITUDE support
+// AutoPA 고도 지원
 //////////////////////////////////////////
-// Enable Altitude motor functionality in your local configuration. Do not edit here!
+// 로컬 구성에서 고도 모터 기능을 활성화하세요. 여기서는 수정하지 마세요!
 #if (ALT_STEPPER_TYPE != STEPPER_TYPE_NONE)
     #ifndef ALT_MICROSTEPPING
         #define ALT_MICROSTEPPING 4
@@ -438,9 +434,9 @@
 #endif
 
 //////////////////////////////////////////
-// Focuser support
+// 포커서 지원
 //////////////////////////////////////////
-// Enable focuser functionality in your local configuration. Do not edit here!
+// 로컬 설정에서 포커서 기능을 활성화하세요. 여기서는 수정하지 마세요!
 #if (FOCUS_STEPPER_TYPE != STEPPER_TYPE_NONE)
     #ifndef FOCUS_UART_STEALTH_MODE
         #define FOCUS_UART_STEALTH_MODE 1
@@ -482,9 +478,9 @@
 #endif
 
 //////////////////////////////////////////
-// RA Homing support
+// RA 자동 홈 지원
 //////////////////////////////////////////
-// Enable homing in your local configuration. Do not edit here!
+// 로컬 설정에서 홈을 활성화하세요. 여기서는 수정하지 마세요!
 #ifndef USE_HALL_SENSOR_RA_AUTOHOME
     #define USE_HALL_SENSOR_RA_AUTOHOME 0
 #elif USE_HALL_SENSOR_RA_AUTOHOME == 1
@@ -497,9 +493,9 @@
 #endif
 
 //////////////////////////////////////////
-// DEC Homing support
+// DEC 자동 홈 지원
 //////////////////////////////////////////
-// Enable homing in your local configuration. Do not edit here!
+// 로컬 설정에서 홈을 활성화하세요. 여기서는 수정하지 마세요!
 #ifndef USE_HALL_SENSOR_DEC_AUTOHOME
     #define USE_HALL_SENSOR_DEC_AUTOHOME 0
 #elif USE_HALL_SENSOR_DEC_AUTOHOME == 1
@@ -511,27 +507,27 @@
     #endif
 #endif
 
-// RA EndSwitch support
+// RA 엔드스위치 지원
 //////////////////////////////////////////
-// Enable RA End Switches in your local configuration. Do not edit here!
+// 로컬 설정에서 RA 엔드스위치를 활성화하세요. 여기서는 수정하지 마세요!
 #ifndef USE_RA_END_SWITCH
     #define USE_RA_END_SWITCH 0
 #else
     #ifndef RA_END_SWITCH_ACTIVE_STATE
         #define RA_END_SWITCH_ACTIVE_STATE LOW
     #endif
-    // You can define how many degrees to slew back after the end switch has triggered.
-    // Mechanical end switches might have a hysteresis behavior, meaning once signaled,
-    // it needs to move well back beyond the signal point to become un-signaled.
+    // 엔드스위치가 트리거된 후 몇 도를 되돌릴지 정의할 수 있습니다.
+    // 기계적 엔드스위치는 히스테리시스 동작을 가질 수 있으며, 한 번 신호가 발생하면
+    // 신호 지점 너머로 충분히 이동해야 신호가 해제될 수 있습니다.
     #ifndef RA_ENDSWITCH_BACKSLEW_DEG
         #define RA_ENDSWITCH_BACKSLEW_DEG 0.5
     #endif
 #endif
 
 //////////////////////////////////////////
-// DEC EndSwitch support
+// DEC 엔드스위치 지원
 //////////////////////////////////////////
-// Enable DEC End Switches in your local configuration. Do not edit here!
+// 로컬 설정에서 DEC 엔드스위치를 활성화하세요. 여기서는 수정하지 마세요!
 #ifndef USE_DEC_END_SWITCH
     #define USE_DEC_END_SWITCH 0
 #else
@@ -548,28 +544,28 @@
 #endif
 
 //////////////////////////////////////////
-// LCD Display support
+// LCD 디스플레이 지원
 //////////////////////////////////////////
-// Enable LCD functionality in your local configuration. Do not edit here!
+// 로컬 설정에서 LCD 기능을 활성화하세요. 여기서는 수정하지 마세요!
 #if DISPLAY_TYPE != DISPLAY_TYPE_NONE
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                         ///
-// FEATURE SUPPORT SECTION ///
-//     FOR MOUNTS WITH     ///
-//       LCD DISPLAY       ///
+// 기능 지원 섹션           ///
+//     LCD 디스플레이가     ///
+//       있는 마운트용      ///
 //                         ///
 //////////////////////////////
 //
-// If you feel comfortable with configuring the OAT at startup manually, you should set
-// SUPPORT_GUIDED_STARTUP to 0 (maybe after you've used it for a while you know what to do).
+// OAT를 수동으로 시작 시 설정하는 것이 편하다면, SUPPORT_GUIDED_STARTUP을 0으로 설정하세요
+// (어느 정도 사용 후에는 무엇을 해야 할지 알게 될 것입니다).
 //
-// The POI menu can take a little data memory and you may not need it. If not, you can set
-// SUPPORT_POINTS_OF_INTEREST to 0
+// POI 메뉴는 약간의 데이터 메모리를 차지할 수 있으며 필요하지 않을 수도 있습니다. 그렇다면
+// SUPPORT_POINTS_OF_INTEREST를 0으로 설정할 수 있습니다.
 //
 //
-// Set this to 1 to support full GO menu.
-// If this is set to 0 you still have a GO menu that has Home and Park.
+// 전체 GO 메뉴를 지원하려면 이 값을 1로 설정하세요.
+// 이 값이 0으로 설정되어 있어도 Home과 Park가 있는 GO 메뉴는 여전히 사용할 수 있습니다.
     #ifndef SUPPORT_POINTS_OF_INTEREST
         #define SUPPORT_POINTS_OF_INTEREST 1
     #endif
@@ -614,7 +610,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                  ////////
-// OTHER HARDWARE CONFIGURATION     ////////
+// 기타 하드웨어 구성               ////////
 //                                  ////////
 ////////////////////////////////////////////
 
@@ -651,7 +647,7 @@
 
 ////////////////////////////
 //
-// DEBUG OUTPUT
+// 디버그 출력
 //
 // #define DEBUG_LEVEL (DEBUG_STEPPERS|DEBUG_MOUNT)
 // #define DEBUG_LEVEL (DEBUG_INFO|DEBUG_MOUNT|DEBUG_GENERAL)
@@ -659,19 +655,17 @@
 // #define DEBUG_LEVEL (DEBUG_ANY)
 // #define DEBUG_LEVEL (DEBUG_INFO|DEBUG_MOUNT|DEBUG_GENERAL)
 //
-// Bit Name                 Output
-//  0  DEBUG_INFO           General output, like startup variables and status
-//  1  DEBUG_SERIAL         Serial commands and replies
-//  2  DEBUG_WIFI           Wifi related output
-//  3  DEBUG_MOUNT          Mount processing output
-//  4  DEBUG_MOUNT_VERBOSE  Verbose mount processing (coordinates, etc)
-//  5  DEBUG_GENERAL        Other misc. output
-//  6  DEBUG_MEADE          Meade command handling output
-// Set this to specify the amount of debug output OAT should send to the serial port.
-// Note that if you use an app to control OAT, ANY debug output will likely confuse that app.
-// Debug output is useful if you are using Wifi to control the OAT or if you are issuing
-// manual commands via a terminal only.
-//
+// 비트 이름                출력
+//  0  DEBUG_INFO           일반 출력, 시작 변수 및 상태 등
+//  1  DEBUG_SERIAL         시리얼 명령 및 응답
+//  2  DEBUG_WIFI           와이파이 관련 출력
+//  3  DEBUG_MOUNT          마운트 처리 출력
+//  4  DEBUG_MOUNT_VERBOSE  자세한 마운트 처리 (좌표 등)
+//  5  DEBUG_GENERAL        기타 잡다한 출력
+//  6  DEBUG_MEADE          Meade 명령 처리 출력
+// OAT가 시리얼 포트로 보내야 하는 디버그 출력의 양을 지정하려면 이 값을 설정하세요.
+// OAT를 제어하는 앱을 사용하는 경우, 어떤 디버그 출력도 해당 앱을 혼란스럽게 할 수 있습니다.
+// 디버그 출력은 OAT를 제어하기 위해 와이파이를 사용하거나 터미널을 통해 수동 명령을 발행할 때 유용합니다.
 #ifndef DEBUG_LEVEL
     #define DEBUG_LEVEL (DEBUG_NONE)
 #endif
