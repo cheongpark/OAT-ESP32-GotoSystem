@@ -66,7 +66,7 @@ void test_mpu_sensor() {
     MPU6050 data;
     bool chk = mpu.read(data);
     
-    if(chk)
+    if(chk) {
       Serial.print("Acceleration : ");
       Serial.print(data.acceleration.x);
       Serial.print(", ");
@@ -87,7 +87,8 @@ void test_mpu_sensor() {
       Serial.print(data.temperature.temperature);
       Serial.println();
       Serial.println();
-
+    }
+    
     TEST_ASSERT_EQUAL(chk, true);
   }
 }

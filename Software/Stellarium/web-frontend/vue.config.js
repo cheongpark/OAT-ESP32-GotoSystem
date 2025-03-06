@@ -5,7 +5,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://api.noctuasky.com',
+        target: process.env.VUE_APP_NOCTUASKY_API_SERVER,
         changeOrigin: true,
         secure: false,
         pathRewrite: {
