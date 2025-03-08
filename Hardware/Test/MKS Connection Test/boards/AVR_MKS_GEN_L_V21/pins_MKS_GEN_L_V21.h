@@ -179,6 +179,11 @@
 // USB pin configuration
 #define USB_SERIAL_PORT Serial // 필수이기 때문에 ifndef 안함
 
+// ESP32 Control pin configuration
+#ifndef ESP32_CONTROL_SERIAL_PORT
+    #define ESP32_CONTROL_SERIAL_PORT Serial1
+#endif
+
 // GPS pin configuration
 #ifndef GPS_SERIAL_PORT
     #define GPS_SERIAL_PORT Serial1 // Serial1은 핀 이름 자체가 저런거 (D18, D19), 참고로 Serial1를 할당했기에 GPS_SERIAL_PORT 이걸 쓰는 곳에선 변수 처럼 사용됨, 전처리기 매크로라 함

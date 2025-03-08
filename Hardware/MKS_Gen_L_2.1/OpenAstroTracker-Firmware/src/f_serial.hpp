@@ -10,7 +10,7 @@
 #if SUPPORT_SERIAL_CONTROL == 1
     #include "MeadeCommandProcessor.hpp"
 
-void processSerialData();
+void processSerialData(Stream &serialPort);
 
 ////////////////////////////////////////////////
 // The main loop when under serial control
@@ -37,7 +37,7 @@ void serialLoop()
     #ifndef ESP32
 void serialEvent()
 {
-    processSerialData();
+    processSerialData(USB_SERIAL_PORT);
 }
     #endif
 
@@ -107,12 +107,12 @@ void processSerialData()
 }
     #else
 // ESP needs to call this in a loop :_(
-void processSerialData()
+void processSerialData(Stream &serialPort)
 {
     char buffer[2];
-    while (Serial.available() > 0)
+    while (serialPort.available() > 0)
     {
-        if (Serial.readBytes(buffer, 1) == 1)
+        if (serialPort.readBytes(buffer, 1) == 1)
         {
             if (buffer[0] == 0x06)
             {
@@ -120,12 +120,12 @@ void processSerialData()
                     // When not debugging, print the result to the serial port .
                     // When debugging, only print the result to Serial if we're on seperate ports.
         #if (DEBUG_LEVEL == DEBUG_NONE) || (DEBUG_SEPARATE_SERIAL == 1)
-                Serial.print('P');
+                serialPort.print('P');
         #endif
             }
             else
             {
-                String inCmd = String(buffer[0]) + Serial.readStringUntil('#');
+                String inCmd = String(buffer[0]) + serialPort.readStringUntil('#');
                 LOG(DEBUG_SERIAL, "[SERIAL]: ReceivedCommand(%d chars): [%s]", inCmd.length(), inCmd.c_str());
 
                 String retVal = MeadeCommandProcessor::instance()->processCommand(inCmd);
@@ -135,7 +135,7 @@ void processSerialData()
                         // When not debugging, print the result to the serial port .
                         // When debugging, only print the result to Serial if we're on seperate ports.
         #if (DEBUG_LEVEL == DEBUG_NONE) || (DEBUG_SEPARATE_SERIAL == 1)
-                    Serial.print(retVal);
+                    serialPort.print(retVal);
         #endif
                 }
                 else

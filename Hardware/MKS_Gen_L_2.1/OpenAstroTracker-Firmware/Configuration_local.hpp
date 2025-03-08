@@ -100,17 +100,23 @@
 ////////////////////////////////
 // GPS Addon configuration 
 // Define whether we have the GPS addon or not. Currently: No GPS
-#define USE_GPS 0
+#define USE_GPS 0 // ESP32에서 사용할 예정
 
 ////////////////////////////////
 // Digital Level Addon configuration 
 // Define whether we have the Digital Level or not. Currently: No Digital Level
-#define USE_GYRO_LEVEL 0
+#define USE_GYRO_LEVEL 0 // ESP32에서 사용할 예정
 
 ////////////////////////////////
 // Focuser configuration 
 // Define whether to support a focusing stepper motor on E1 or not. Currently: No Focuser
 // No Focuser settings
+
+////////////////////////////////
+// Serial ESP32 Control 
+// ESP32로 OAT를 컨트롤 할 수 있게 하는걸 켜는 옵션, 0은 끄기, 1은 켜기
+// 현재는 USB 시리얼 통신을 이용해서 전송하는데 (GPS나 GYRO는 ESP32에 장착할 것이기 때문에 그 때는 ESP32로 연결되게 해야해서 이 옵션은 남겨두기)
+#define USE_ESP32_CONTROL 1
 
 ////////////////////////////////
 // AutoPA Addon configuration 
@@ -177,7 +183,8 @@
 ////////////////////////////////
 // Auto Homing addons
 #define USE_HALL_SENSOR_RA_AUTOHOME 1
+#define USE_HALL_SENSOR_DEC_AUTOHOME 1
 
 ///////////////////////
 // Debug settings
-#define DEBUG_LEVEL (DEBUG_NONE)
+#define DEBUG_LEVEL (DEBUG_NONE) // 원래는 DEBUG_NONE

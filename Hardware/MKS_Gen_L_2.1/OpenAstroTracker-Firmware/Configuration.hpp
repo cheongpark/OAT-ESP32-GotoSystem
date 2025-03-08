@@ -161,7 +161,11 @@
  * 미리 정의된 SERIAL_BAUDRATE 옵션은 Constants.hpp를 참조하거나 필요에 따라 사용자 정의하세요.
  */
 #ifndef SERIAL_BAUDRATE
-    #define SERIAL_BAUDRATE SERIAL_BAUDRATE_ASCOM
+    #if USE_ESP32_CONTROL == 1
+        #define SERIAL_BAUDRATE SERIAL_BAUDRATE_ESP32 // ESP32로 통신할 때 비트레이트를 다르게 할 수도 있기 때문에
+    #else
+        #define SERIAL_BAUDRATE SERIAL_BAUDRATE_ASCOM
+    #endif
 #endif
 
 /**

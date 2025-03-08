@@ -109,7 +109,7 @@ void setup()
         #error "Debugging not supported on this platform"
     #endif
 #else
-    Serial.begin(SERIAL_BAUDRATE);
+    USB_SERIAL_PORT.begin(SERIAL_BAUDRATE);
     #if DEBUG_LEVEL > 0 && DEBUG_SEPARATE_SERIAL == 1
     DEBUG_SERIAL_PORT.begin(DEBUG_SERIAL_BAUDRATE);
     #endif

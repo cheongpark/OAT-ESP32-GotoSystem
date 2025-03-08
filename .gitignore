@@ -6,6 +6,7 @@ node_modules
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+build_cache
 
 ### PlatformIO ###
 .pioenvs

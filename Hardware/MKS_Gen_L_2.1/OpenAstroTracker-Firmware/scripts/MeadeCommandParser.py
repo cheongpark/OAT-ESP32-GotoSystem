@@ -236,7 +236,7 @@ for i in range(len(family_dividers) - 1):
 # PARSE MEADE COMMANDS
 # ***************************************************************
 CURRENT_VERSION = "0.0"
-with open(os.path.join(MODULE_PATH, VERSION_FILE)) as f:
+with open(os.path.join(MODULE_PATH, VERSION_FILE), encoding="utf-8") as f:
     version_content = f.readlines()
 version_content = [x.strip() for x in version_content]
 
@@ -255,69 +255,68 @@ def output_wiki():
     Writes content to a MeadeToWikiOutput.txt file 
     """
 
-    f = open("./scripts/MeadeToWikiOutput.txt", "w")
-    
-    f.write("> AUTOMATICALLY GENERATED FROM FIRMWARE - DO NOT EDIT\n")
-    f.write("{.is-danger}\n\n")
+    with open("MeadeToWikiOutput.md", "w", encoding="utf-8") as f:
+        f.write("> AUTOMATICALLY GENERATED FROM FIRMWARE - DO NOT EDIT\n")
+        f.write("{.is-danger}\n\n")
 
-    f.write(f"> This documentation is current as of Firmware **{CURRENT_VERSION}**\n")
-    f.write("{.is-warning}\n\n")
+        f.write(f"> This documentation is current as of Firmware **{CURRENT_VERSION}**\n")
+        f.write("{.is-warning}\n\n")
 
-    for fam in all_commands:
+        for fam in all_commands:
+            
+            f.write(f"## {fam.name}\n")
+            f.write("<br>\n\n")
+
+            for cmd in fam.commands:
+                f.write(f"### {cmd.description}\n")
+                
+                if cmd.information:
+                    #f.write("**Information:**\n")
+                    for line in cmd.information:
+                        f.write(f"{line} ")
+                    f.write("\n\n")
+
+                f.write(f"**Command:**\n")
+                f.write(f"`{cmd.command}`\n")
+                f.write("\n")  
+
+                f.write("**Returns:**\n")
+                for line in cmd.returns:
+                    f.write(f"- {line}\n")
+                f.write("\n")
+
+                if cmd.parameters:
+                    f.write("**Parameters:**\n")
+                    for param in cmd.parameters:
+                        f.write(f"- {param}\n")
+                    f.write("\n")
+
+                if cmd.remarks:
+                    f.write("**Remarks:**\n")
+                    for param in cmd.remarks:
+                        f.write(f"{param}\n")
+                    f.write("\n")
+
+                if cmd.example:
+                    f.write("**Example:**\n")
+                    for param in cmd.example:
+                        f.write(f"- {param}\n")
+                    f.write("\n")
+                
+                f.write("<br>")
+                f.write("\n")
+                f.write("\n")
+
+        f.write("\n\n")
         
-        f.write(f"## {fam.name}\n")
-        f.write("<br>\n\n")
+        f.write("> AUTOMATICALLY GENERATED FROM FIRMWARE - DO NOT EDIT\n")
+        f.write("{.is-danger}\n\n")
 
-        for cmd in fam.commands:
-            f.write(f"### {cmd.description}\n")
-            
-            if cmd.information:
-                #f.write("**Information:**\n")
-                for line in cmd.information:
-                    f.write(f"{line} ")
-                f.write("\n\n")
+        f.write(f"> This documentation is current as of Firmware **{CURRENT_VERSION}**\n")
+        f.write("{.is-warning}\n\n")
 
-            f.write(f"**Command:**\n")
-            f.write(f"`{cmd.command}`\n")
-            f.write("\n")  
-
-            f.write("**Returns:**\n")
-            for line in cmd.returns:
-                f.write(f"- {line}\n")
-            f.write("\n")
-
-            if cmd.parameters:
-                f.write("**Parameters:**\n")
-                for param in cmd.parameters:
-                    f.write(f"- {param}\n")
-                f.write("\n")
-
-            if cmd.remarks:
-                f.write("**Remarks:**\n")
-                for param in cmd.remarks:
-                    f.write(f"{param}\n")
-                f.write("\n")
-
-            if cmd.example:
-                f.write("**Example:**\n")
-                for param in cmd.example:
-                    f.write(f"- {param}\n")
-                f.write("\n")
-            
-            f.write("<br>")
-            f.write("\n")
-            f.write("\n")
-
-    f.write("\n\n")
-    
-    f.write("> AUTOMATICALLY GENERATED FROM FIRMWARE - DO NOT EDIT\n")
-    f.write("{.is-danger}\n\n")
-
-    f.write(f"> This documentation is current as of Firmware **{CURRENT_VERSION}**\n")
-    f.write("{.is-warning}\n\n")
-
-    f.close()
-    print("File written to: ./scripts/MeadeToWikiOutput.txt")
+        f.close()
+        print("File written to: ./scripts/MeadeToWikiOutput.txt")
 
 if __name__ == "__main__":
     output_wiki()
