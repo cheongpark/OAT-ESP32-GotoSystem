@@ -3,20 +3,26 @@
 
 class HallSensor {
 public:
-    HallSensor(int pin);
+    HallSensor();
     
+    void init(int pin);
     bool read(bool &data);
 
 private:
     int pin;
 };
 
-HallSensor::HallSensor(int pin) {
+HallSensor::HallSensor() {
+    
+}
+
+void HallSensor::init(int pin) {
     this->pin = pin;
+    pinMode(pin, INPUT);
 }
 
 bool HallSensor::read(bool &data) {
     data = digitalRead(pin);
-
+    
     return true;
 }
