@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 OAT CONTROL</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="tc1">ESP32 OAT CONTROL</h1>
+    </header>
+    <main>
+        <div>
+            <div class="box">
+                <h2 class="tc2">TARGET</h2>
+                <div>
+                    <div>
+                        <h2 class="tc2">RA</h2>
+                        <div>
+                            <h3>0</h3>
+                            <h3>0</h3>
+                            <h3>0</h3>
+                        </div>
+                        <div>
+                            <div class="number-control">
+                                <button class="increment"></button>
+                                <input type="number" 
+                                    class="number-input" 
+                                    id="ra-h"
+                                    value="0" 
+                                    step="1"
+                                    min="0" 
+                                    max="23">
+                                <button class="decrement"></button>
+                            </div>
+                            <div class="number-control">
+                                <button class="increment"></button>
+                                <input type="number" 
+                                    class="number-input" 
+                                    id="ra-m"
+                                    value="0" 
+                                    step="1"
+                                    min="0" 
+                                    max="59">
+                                <button class="decrement"></button>
+                            </div>
+                            <div class="number-control">
+                                <button class="increment"></button>
+                                <input type="number" 
+                                    class="number-input" 
+                                    id="ra-s"
+                                    value="0" 
+                                    step="1"
+                                    min="0" 
+                                    max="59">
+                                <button class="decrement"></button>
+                            </div>
+                        </div>
+                        <div>
+                            <h2>H</h2>
+                            <h2>M</h2>
+                            <h2>S</h2>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="tc2">DEC</h2>
+                        <div>
+                            <h3>0</h3>
+                            <h3>0</h3>
+                            <h3>0</h3>
+                        </div>
+                        <div>
+                            <div class="number-control">
+                                <button class="increment"></button>
+                                <input type="number" 
+                                    class="number-input" 
+                                    id="dec-d"
+                                    value="0" 
+                                    step="1"
+                                    min="-90" 
+                                    max="90">
+                                <button class="decrement"></button>
+                            </div>
+                            <div class="number-control">
+                                <button class="increment"></button>
+                                <input type="number" 
+                                    class="number-input" 
+                                    id="dec-m"
+                                    value="0" 
+                                    step="1"
+                                    min="0" 
+                                    max="59">
+                                <button class="decrement"></button>
+                            </div>
+                            <div class="number-control">
+                                <button class="increment"></button>
+                                <input type="number" 
+                                    class="number-input" 
+                                    id="dec-s"
+                                    value="0" 
+                                    step="1"
+                                    min="0" 
+                                    max="59">
+                                <button class="decrement"></button>
+                            </div>
+                        </div>
+                        <div>
+                            <h2>°</h2>
+                            <h2>M</h2>
+                            <h2>S</h2>
+                        </div>
+                    </div>
+                </div>
+                <button id="btn_target_tracking" class="box tc1 click_pls">TRACKING</button>
+            </div>
+            <div>
+                <div class="box">
+                    <h2 class="tc2">RA / DEC</h2>
+                    <div class="control-pad" id="ra-dec-control">
+                        <svg class="up" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="50 15, 100 100, 0 100" class="triangle" />
+                        </svg>
+                        <svg class="left" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="15 50, 100 0, 100 100" class="triangle" />
+                        </svg>
+                        <svg class="right" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="85 50, 0 0, 0 100" class="triangle" />
+                        </svg>
+                        <svg class="down" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="50 85, 0 0, 100 0" class="triangle" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="box">
+                    <h2 class="tc2">AZ / ALT</h2>
+                    <div class="control-pad" id="az-alt-control">
+                        <svg class="up" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="50 15, 100 100, 0 100" class="triangle" />
+                        </svg>
+                        <svg class="left" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="15 50, 100 0, 100 100" class="triangle" />
+                        </svg>
+                        <svg class="right" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="85 50, 0 0, 0 100" class="triangle" />
+                        </svg>
+                        <svg class="down" width="80" height="80" viewBox="0 0 100 100">
+                            <polygon points="50 85, 0 0, 100 0" class="triangle" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="box">
+                    <h2 class="tc2">STOP</h2>
+                    <div>
+                        <div id="btn_stop">
+                            <h2 class="tc2">STOP</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box">
+            <div>
+                <h2 class="tc2">CONFIG</h2>
+                <div>
+                    <button id="btn_auto-home" class="box tc1">AUTO HOME</button>
+                    <button id="btn_home" class="box tc1">HOME</button>
+                </div>
+            </div>
+            <div>
+                <h2 class="tc2">STAR</h2>
+                <div>
+                    <hr>
+                    <div>
+                        <ul id="star-list">
+                        </ul>
+                    </div>
+                    <button id="btn_star_tracking" class="box tc1">TRACKING</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div>
+            <p class="tc2 bold tal">GPS : 0000 LAT | 0000 LNG</p>
+            <p class="tc2 bold tal">Model : OAT</p>
+            <p class="tc2 bold tal">Firmware Version : 1.13.13</p>
+        </div>
+        <div>
+            <h3>TRACKING RATE</h3>
+            <div>
+                <h3 class="selected">1</h3>
+                <h3>2</h3>
+                <h3>3</h3>
+                <h3>4</h3>
+                <h3>5</h3>
+            </div>
+        </div>
+        <div>
+            <p id="log" class="tc2 bold tar">LOG</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

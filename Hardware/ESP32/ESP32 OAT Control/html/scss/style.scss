@@ -1,0 +1,443 @@
+$color-1: #FF6200;
+$color-2: #FF0000;
+$color-3: #8D0000;
+$color-4: #610000;
+
+$input-textbox-width: 100px;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.tc1 { /* Text Color 1 */
+    color: $color-1;
+}
+
+.tc2 { /* Text Color 2 */
+    color: $color-2;
+}
+
+.tc3 { /* Text Color 3 */
+    color: $color-3;
+}
+
+.bold { /* Text Bold */
+    font-weight: bold;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    text-align: center;
+    font-weight: bold;
+}
+
+.tac { /* Text Center */
+    text-align: center;
+}
+
+.tal { /* Text Left */
+    text-align: left;
+}
+
+.tar { /* Text Right */
+    text-align: right;
+}
+
+header {
+    width: 100%;
+    height: 50px;
+}
+
+.box {
+    border: 2px solid $color-3;
+    border-radius: 20px;
+}
+
+.control-pad {
+    display: grid;
+    grid-template-columns: repeat(3, calc($input-textbox-width - 10px));
+    grid-gap: 10px;
+    grid-auto-rows: 90px;
+    justify-content: center;
+    margin-top: 10px;
+
+    > .up {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    > .down {
+        grid-column: 2;
+        grid-row: 3;
+    }
+    > .left {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    > .right {
+        grid-column: 3;
+        grid-row: 2;
+    }
+    .triangle {
+        fill: $color-3;
+        cursor: pointer;
+
+        &:hover {
+            fill: $color-2;
+        }
+        &:active {
+            fill: $color-1;
+        }
+    }
+}
+
+.number-control {
+    display: flex;
+    flex-direction: column;
+    width: 90px;
+    
+    .number-input {
+        width: 100%;
+        text-align: center;
+        border: 2px solid $color-3;
+        background-color: transparent;
+        color: $color-3;
+        font-size: 1.5rem;
+        cursor: pointer;
+
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        appearance: textfield;
+        -moz-appearance: textfield;
+    }
+    
+    button {
+        display: none;
+    }
+}
+
+main {
+    width: 60%;
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    padding-top: 30px;
+
+    > div:nth-child(1) {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        > div:nth-child(1) { /* TARGET */
+            flex: 1;
+
+            > div {
+                display: flex;
+                margin-top: 30px;
+                
+                > div {
+                    display: grid;
+                    grid-template-columns: repeat(3, $input-textbox-width);
+                    grid-template-rows: 50px 30px 32px 30px;
+                    margin: 0 auto;
+
+                    > h2 {
+                        grid-column: 1 / 4;
+                        grid-row: 1;
+                        line-height: 50px;
+                    }
+                    > div {
+                        display: grid;
+                        grid-template-columns: repeat(3, $input-textbox-width);
+
+                        &:nth-child(2) {
+                            grid-row: 2;
+                            color: $color-3;
+                            line-height: 30px;
+                        }
+                        &:nth-child(3) {
+                            grid-row: 3;
+                            line-height: 50px;
+                        }
+                        &:nth-child(4) {
+                            grid-row: 4;
+                            color: $color-1;
+                            line-height: 30px;
+                        }
+                        > div {
+                            margin: 0 auto;
+                            
+                            &:nth-child(1) {
+                                grid-column: 1;
+                            }
+                            &:nth-child(2) {
+                                grid-column: 2;
+                            }
+                            &:nth-child(3) {
+                                grid-column: 3;
+                            }
+                        }
+                    }
+                }
+            }
+
+            > button {
+                width: 120px;
+                height: 40px;
+                background-color: black;
+                border-radius: 0px;
+                font-size: 1rem;
+                margin: 0px auto;
+                cursor: pointer;
+                display: block;
+                margin: 0 auto;
+                margin-top: 30px;
+                
+                &:hover {
+                    background-color: $color-4;
+                }
+                &:active {
+                    background-color: $color-1;
+                    color: $color-2;
+                }
+
+                &.click_pls {
+                    animation: pulse 1.5s infinite;
+                    position: relative;
+
+                    @keyframes pulse {
+                        0% {
+                            box-shadow: 0 0 0 0 rgba($color-1, 0.7);
+                        }
+                        70% {
+                            box-shadow: 0 0 0 10px rgba($color-1, 0);
+                        }
+                        100% {
+                            box-shadow: 0 0 0 0 rgba($color-1, 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        > div:nth-child(2) {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+
+            > div:nth-child(1) { /* RA / DEC*/
+                flex: 2;
+                width: 100%;
+                aspect-ratio: 1 / 1;
+            }
+
+            > div:nth-child(2) { /* AZ / ALT*/
+                flex: 2;
+                width: 100%;
+                aspect-ratio: 1 / 1;
+            }
+
+            > div:nth-child(3) { /* STOP */
+                flex: 1.5;
+                width: 100%;
+
+                > div {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+
+                    > div {
+                        width: 80%; 
+                        aspect-ratio: 1 / 1;
+                        border: 3px solid $color-2; 
+                        border-radius: 50%; 
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: $color-4;
+                        }
+                        &:active {
+                            background-color: $color-1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    > div:nth-child(2) { 
+        flex: 1;
+
+        > div:nth-child(1) { /* CONFIG */
+            > div {
+                display: flex;
+                margin-top: 15px;
+                justify-content: space-around;
+
+                > button {
+                    width: 40%;
+                    height: 40px;
+                    background-color: black;
+                    border-radius: 0px;
+                    font-size: 1rem;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: $color-4;
+                    }
+                    &:active {
+                        background-color: $color-1;
+                        color: $color-2;
+                    }
+                }
+            }
+        }
+
+        > div:nth-child(2) { /* STAR */
+            margin-top: 15px;
+
+            > div {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+
+                > hr {
+                    width: 90%;
+                    margin: 0 auto;
+                    border: 1px solid $color-4;
+                }
+                
+                > div {
+                    width: 90%;
+                    margin: 0 auto;
+
+                    > ul { /* STAR LIST */
+                        height: 500px;
+                        list-style: none;
+                        overflow-y: scroll;
+                        scrollbar-width: thin;
+                        scrollbar-color: $color-4 transparent;
+                        
+                        &::-webkit-scrollbar {
+                            width: 6px;
+                        }
+                        &::-webkit-scrollbar-track {
+                            background: transparent;
+                        }
+                        &::-webkit-scrollbar-thumb {
+                            background-color: $color-4;
+                            border-radius: 3px;
+                        }
+                        
+                        > li {
+                            padding: 5px 0px 5px 10px;
+                            color: $color-3;
+                            border-bottom: 1px solid $color-4;
+
+                            &:hover {
+                                color: $color-2;
+                            }
+                            &.selected {
+                                color: $color-1;
+                            }
+                        }
+                    }
+                }
+
+                > button { /* TRACKING */
+                    width: 120px;
+                    height: 40px;
+                    background-color: black;
+                    border-radius: 0px;
+                    font-size: 1rem;
+                    margin: 10px auto;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: $color-4;
+                    }
+                    &:active {
+                        background-color: $color-1;
+                        color: $color-2;
+                    }
+                }
+            }
+        }
+    }
+}
+
+footer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0 10px 10px 10px;
+    box-sizing: border-box;
+    
+    > div:nth-child(1) {
+        flex: 1;
+    }
+    
+    > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: $color-2;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+
+        > div {
+            display: flex;
+            color: $color-3;
+            border: 1px solid $color-3;
+            justify-content: space-between;
+
+            > h3 {
+                width: 50px;
+                border: 1px solid $color-3;
+
+                &:hover {
+                    background-color: $color-4;
+                    color: $color-2;
+                    border: 1px solid $color-2;
+                }
+                &:active {
+                    background-color: $color-3;
+                }
+                &.selected {
+                    background-color: $color-1;
+                    color: $color-2;
+                    border: 1px solid $color-2;
+                }
+            }
+        }
+    }
+    
+    > div:nth-child(3) {
+        flex: 1;
+        text-align: right;
+    }
+}

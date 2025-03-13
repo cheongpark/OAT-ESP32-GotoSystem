@@ -1,5 +1,6 @@
 정리
 node_modules
+secrets.hpp
 
 .pio
 .vscode/.browse.c_cpp.db*
