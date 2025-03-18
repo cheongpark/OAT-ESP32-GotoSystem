@@ -1,9 +1,0 @@
-이 디렉토리는 PlatformIO 테스트 러너 및 프로젝트 테스트를 위한 것입니다.
-
-단위 테스트는 소스 코드의 개별 단위, 
-하나 이상의 MCU 프로그램 모듈과 관련 제어 데이터, 
-사용 절차 및 운영 절차를 함께 테스트하여 사용 가능 여부를 결정하는 소프트웨어 테스트 방법입니다. 
-단위 테스트는 개발 주기 초기에 문제를 발견합니다.
-
-PlatformIO 단위 테스트에 대한 자세한 정보:
-- https://docs.platformio.org/en/latest/advanced/unit-testing/index.html
