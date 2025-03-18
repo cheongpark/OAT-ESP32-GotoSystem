@@ -5,7 +5,7 @@
 
 // OAT Connection Test : 1
 // Sensor Test : 2
-#define TEST_NUM 1 
+#define TEST_NUM 2
 
 #if TEST_NUM == 1
 #include "oat_connection_test/oat_connection_test.hpp"
@@ -23,7 +23,7 @@ void test_oat() {
 SensorTest sensor_test;
 
 void test_sensor() {
-  sensor_test.test(MPU);
+  sensor_test.test(SENSOR_GPS);
 }
 #endif
 
@@ -74,7 +74,7 @@ void setup() {
   #if TEST_NUM == 1
   oat_test.init(Serial2, {"GVP", "GVN", "XGM"});
   #elif TEST_NUM == 2
-  sensor_test.init(MPU);
+  sensor_test.init(SENSOR_GPS);
   #endif
 
   UNITY_BEGIN();

@@ -9,4 +9,4 @@
 
 // MAIN
 #define OAT_SERIAL Serial2
-#define OAT_BAUD_RATE 2400
+#define OAT_BAUD_RATE 19200

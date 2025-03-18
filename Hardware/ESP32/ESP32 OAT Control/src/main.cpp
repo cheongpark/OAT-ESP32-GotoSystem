@@ -1,8 +1,5 @@
 #include "main.hpp"
 
-AsyncWebServer server(80);  // 80 포트에서 웹 서버 실행
-MountSerial& oat = MountSerial::getInstance();
-
 void setup() {
     // 시리얼 통신 초기화
     Serial.begin(115200);
@@ -13,12 +10,15 @@ void setup() {
     setupWebServer();
 
     // OAT 연결
-    oat.init(OAT_SERIAL, OAT_BAUD_RATE);
-    bool is_connect = oat.connect();
+    mount_serial.init(OAT_SERIAL, OAT_BAUD_RATE);
+    bool is_connect = mount_serial.connect();
     if(is_connect) 
         LOG(LOG_INFO, "OAT가 연결되었습니다.");
     else
         LOG(LOG_ERROR, "OAT 연결에 실패했습니다.");
+
+    // 초기화
+    initialize.init();
 }
 
 void loop() {
@@ -37,9 +37,9 @@ String processor(const String& var) {
     if(var == "GPSINFO")
         return F("asdsdasadasdasd");
     if(var == "FIRMWAREMODEL")
-        return F(oat.getProductName().c_str());
+        return F(mount_data.get_info_product_name().c_str());
     if(var == "FIRMWAREVERSION")
-        return F(oat.getFirmwareVersion().c_str());
+        return F(mount_data.get_info_firmware_version().c_str());
     return String();
 }
 

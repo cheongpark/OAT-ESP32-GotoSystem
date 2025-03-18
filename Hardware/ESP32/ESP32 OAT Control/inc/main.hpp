@@ -8,10 +8,16 @@
 #include "secrets.hpp"
 #include "page.hpp"
 #include "log.hpp"
-#include "mount_serial.hpp"
 #include "settings.hpp"
+#include "mount/serial.hpp"
+#include "mount/data.hpp"
+#include "management/initialize.hpp"
 
-extern AsyncWebServer server;
+AsyncWebServer server(80);  // 80 포트에서 웹 서버 실행
+Mount::Serial& mount_serial = Mount::Serial::getInstance();
+Mount::Data& mount_data = Mount::Data::getInstance();
+
+Initialize initialize;
 
 void setupWiFi();
 void setupWebServer();

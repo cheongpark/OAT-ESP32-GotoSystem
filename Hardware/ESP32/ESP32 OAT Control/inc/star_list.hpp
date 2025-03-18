@@ -18,6 +18,7 @@ public:
     class Get {
 	private:
 		Star& star;
+
     public:
         Get(Star& star) : star(star) {}
 
@@ -38,6 +39,7 @@ public:
 	class Set {
 	private:
 		Star& star;
+        
 	public:
 		Set(Star& star) : star(star) {}
 

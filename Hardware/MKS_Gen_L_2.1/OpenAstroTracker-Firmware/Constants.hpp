@@ -61,7 +61,7 @@
 
 // 외부 컨트롤러에 따른 USB 시리얼 포트 속도
 #define SERIAL_BAUDRATE_ASCOM 19200
-#define SERIAL_BAUDRATE_ESP32 2400 // ESP32는 레벨 시프터가 필요하기에 임시로 가능한 비트레이트로 설정
+#define SERIAL_BAUDRATE_ESP32 19200
 
 // Wifi 작동 모드 (ESP32 전용)
 #define WIFI_MODE_INFRASTRUCTURE 0  // 인프라 전용 - OAT가 기존 라우터에 연결
