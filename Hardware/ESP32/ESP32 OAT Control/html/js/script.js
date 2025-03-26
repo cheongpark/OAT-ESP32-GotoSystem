@@ -100,9 +100,19 @@ class TargetDEC {
 let targetRA = new TargetRA();
 let targetDEC = new TargetDEC();
 
+// 개발 모드 설정
+const DEV_MODE = true;
+
 // HTTP 요청 전송 함수
 function sendRequest(endpoint, logMessage) {
     const logElement = document.getElementById('log');
+    
+    if (DEV_MODE) {
+        // 개발 모드일 때는 실제 요청을 보내지 않고 로그만 출력
+        console.log('[DEV] Request:', endpoint, logMessage);
+        logElement.textContent = `[DEV] ${logMessage}(${endpoint})`;
+        return;
+    }
     
     fetch(`http://localhost:${endpoint}`)
         .then(response => {
@@ -113,11 +123,11 @@ function sendRequest(endpoint, logMessage) {
         })
         .then(data => {
             console.log('Success: ', logMessage, data);
-            logElement.textContent = `Success: ${logMessage}(${data})`;
+            logElement.textContent = `Success: ${logMessage} (${data})`;
         })
         .catch(error => {
             console.error('Error: ', logMessage, error);
-            logElement.textContent = `Error: ${logMessage}(${error})`;
+            logElement.textContent = `Error: ${logMessage} (${error})`;
         });
 }
 
@@ -224,12 +234,40 @@ document.addEventListener('DOMContentLoaded', () => {
         sendRequest('/stop', '긴급 정지');
     });
 
-    // div 클릭 이벤트 리스너 예시
-    document.getElementById('btn_auto-home').addEventListener('click', () => {
-        sendRequest('/auto-home', '자동 홈 이동');
+    // RA/DEC 컨트롤 패드 이벤트
+    const raDecControl = document.getElementById('ra-dec-control');
+    const raDecTriangles = raDecControl.querySelectorAll('.triangle');
+    let activeRADECTriangle = null;
+    
+    raDecTriangles.forEach(triangle => {
+        triangle.addEventListener('mousedown', () => {
+            activeRADECTriangle = triangle;
+            const direction = triangle.parentElement.classList[0];
+            sendRequest(`/ra-dec/control?direction=${direction.toLowerCase()}`, `RA/DEC ${direction.toLowerCase()}`);
+        });
     });
-    document.getElementById('btn_home').addEventListener('click', () => {
-        sendRequest('/home', '수동 홈 이동');
+    
+    // AZ/ALT 컨트롤 패드 이벤트  
+    // AZ/ALT의 경우 눌를 때 마다 한번씩만 이동하기 때문에 떼는건 감지 안해도 됨
+    const azAltControl = document.getElementById('az-alt-control');
+    const azAltTriangles = azAltControl.querySelectorAll('.triangle');
+    let activeAZALTTriangle = null;
+    
+    azAltTriangles.forEach(triangle => {
+        triangle.addEventListener('mousedown', () => {
+            activeAZALTTriangle = triangle;
+            const direction = triangle.parentElement.classList[0];
+            sendRequest(`/az-alt/control?direction=${direction.toLowerCase()}`, `AZ/ALT ${direction.toLowerCase()}`);
+        });
+    });
+    
+    // 전역 마우스 업 이벤트 - RA/DEC
+    document.addEventListener('mouseup', () => {
+        if (activeRADECTriangle) {
+            const direction = activeRADECTriangle.parentElement.classList[0];
+            sendRequest(`/ra-dec/stop?direction=${direction.toLowerCase()}`, `RA/DEC STOP ${direction.toLowerCase()}`);
+            activeRADECTriangle = null;
+        }
     });
 });
 

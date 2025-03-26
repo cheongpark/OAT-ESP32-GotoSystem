@@ -8,5 +8,14 @@
 #define LOG_SERIAL Serial
 
 // MAIN
-#define OAT_SERIAL Serial2
-#define OAT_BAUD_RATE 19200
+#define OAT_SERIAL Serial2 // (16, 17) pin
+#define OAT_BAUD_RATE 19200 
+
+// WiFi
+#define WIFI_IP "192.168.4.1"
+#define WIFI_GATEWAY "192.168.4.1"
+#define WIFI_SUBNET "255.255.255.0"
+
+// OAT
+extern float RADEC_SLEW_RATES[6]; // 0, 1, 2, 3, 4, 5
+extern float AZALT_SLEW_RATES[6]; // 0, 1, 2, 3, 4, 5

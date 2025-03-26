@@ -19,9 +19,7 @@ namespace Mount {
         unsigned long baud_rate;
         bool initialized;
         
-
         Serial() : mnt_serial(nullptr), baud_rate(0), initialized(false) {}
-        ~Serial() {}
 
     public:
         // Singletone
@@ -35,7 +33,7 @@ namespace Mount {
         bool connect();
         bool isConnected();
         
-        Response request(const String command);
+        Response request(const String command, bool is_response = true);
     };
 }
 

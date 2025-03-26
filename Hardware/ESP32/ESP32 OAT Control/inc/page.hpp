@@ -69,21 +69,21 @@ header {
   justify-content: center;
   margin-top: 10px;
 }
-.control-pad > .up {
+.control-pad > .N {
   grid-column: 2;
   grid-row: 1;
 }
-.control-pad > .down {
-  grid-column: 2;
-  grid-row: 3;
-}
-.control-pad > .left {
+.control-pad > .W {
   grid-column: 1;
   grid-row: 2;
 }
-.control-pad > .right {
+.control-pad > .E {
   grid-column: 3;
   grid-row: 2;
+}
+.control-pad > .S {
+  grid-column: 2;
+  grid-row: 3;
 }
 .control-pad .triangle {
   fill: #8D0000;
@@ -499,11 +499,21 @@ class TargetDEC {
 let targetRA = new TargetRA();
 let targetDEC = new TargetDEC();
 
+// 개발 모드 설정
+const DEV_MODE = false;
+
 // HTTP 요청 전송 함수
 function sendRequest(endpoint, logMessage) {
     const logElement = document.getElementById('log');
     
-    fetch(`http://localhost:${endpoint}`)
+    if (DEV_MODE) {
+        // 개발 모드일 때는 실제 요청을 보내지 않고 로그만 출력
+        console.log('[DEV] Request:', endpoint, logMessage);
+        logElement.textContent = `[DEV] ${logMessage}(${endpoint})`;
+        return;
+    }
+    
+    fetch(`http://192.168.4.1:${endpoint}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('네트워크 응답이 올바르지 않습니다');
@@ -512,11 +522,11 @@ function sendRequest(endpoint, logMessage) {
         })
         .then(data => {
             console.log('Success: ', logMessage, data);
-            logElement.textContent = `Success: ${logMessage}(${data})`;
+            logElement.textContent = `Success: ${logMessage} (${data})`;
         })
         .catch(error => {
             console.error('Error: ', logMessage, error);
-            logElement.textContent = `Error: ${logMessage}(${error})`;
+            logElement.textContent = `Error: ${logMessage} (${error})`;
         });
 }
 
@@ -623,12 +633,40 @@ document.addEventListener('DOMContentLoaded', () => {
         sendRequest('/stop', '긴급 정지');
     });
 
-    // div 클릭 이벤트 리스너 예시
-    document.getElementById('btn_auto-home').addEventListener('click', () => {
-        sendRequest('/auto-home', '자동 홈 이동');
+    // RA/DEC 컨트롤 패드 이벤트
+    const raDecControl = document.getElementById('ra-dec-control');
+    const raDecTriangles = raDecControl.querySelectorAll('.triangle');
+    let activeRADECTriangle = null;
+    
+    raDecTriangles.forEach(triangle => {
+        triangle.addEventListener('mousedown', () => {
+            activeRADECTriangle = triangle;
+            const direction = triangle.parentElement.classList[0];
+            sendRequest(`/ra-dec/control?direction=${direction.toLowerCase()}`, `RA/DEC ${direction.toLowerCase()}`);
+        });
     });
-    document.getElementById('btn_home').addEventListener('click', () => {
-        sendRequest('/home', '수동 홈 이동');
+    
+    // AZ/ALT 컨트롤 패드 이벤트  
+    // AZ/ALT의 경우 눌를 때 마다 한번씩만 이동하기 때문에 떼는건 감지 안해도 됨
+    const azAltControl = document.getElementById('az-alt-control');
+    const azAltTriangles = azAltControl.querySelectorAll('.triangle');
+    let activeAZALTTriangle = null;
+    
+    azAltTriangles.forEach(triangle => {
+        triangle.addEventListener('mousedown', () => {
+            activeAZALTTriangle = triangle;
+            const direction = triangle.parentElement.classList[0];
+            sendRequest(`/az-alt/control?direction=${direction.toLowerCase()}`, `AZ/ALT ${direction.toLowerCase()}`);
+        });
+    });
+    
+    // 전역 마우스 업 이벤트 - RA/DEC
+    document.addEventListener('mouseup', () => {
+        if (activeRADECTriangle) {
+            const direction = activeRADECTriangle.parentElement.classList[0];
+            sendRequest(`/ra-dec/stop?direction=${direction.toLowerCase()}`, `RA/DEC STOP ${direction.toLowerCase()}`);
+            activeRADECTriangle = null;
+        }
     });
 });
 
@@ -721,16 +759,16 @@ const char index_html[] PROGMEM = R"rawliteral(
 <div class="box">
 <h2 class="tc2">RA / DEC</h2>
 <div class="control-pad" id="ra-dec-control">
-<svg class="up" height="80" viewbox="0 0 100 100" width="80">
+<svg class="N" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="50 15, 100 100, 0 100"></polygon>
 </svg>
-<svg class="left" height="80" viewbox="0 0 100 100" width="80">
+<svg class="W" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="15 50, 100 0, 100 100"></polygon>
 </svg>
-<svg class="right" height="80" viewbox="0 0 100 100" width="80">
+<svg class="E" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="85 50, 0 0, 0 100"></polygon>
 </svg>
-<svg class="down" height="80" viewbox="0 0 100 100" width="80">
+<svg class="S" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="50 85, 0 0, 100 0"></polygon>
 </svg>
 </div>
@@ -738,16 +776,16 @@ const char index_html[] PROGMEM = R"rawliteral(
 <div class="box">
 <h2 class="tc2">AZ / ALT</h2>
 <div class="control-pad" id="az-alt-control">
-<svg class="up" height="80" viewbox="0 0 100 100" width="80">
+<svg class="N" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="50 15, 100 100, 0 100"></polygon>
 </svg>
-<svg class="left" height="80" viewbox="0 0 100 100" width="80">
+<svg class="W" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="15 50, 100 0, 100 100"></polygon>
 </svg>
-<svg class="right" height="80" viewbox="0 0 100 100" width="80">
+<svg class="E" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="85 50, 0 0, 0 100"></polygon>
 </svg>
-<svg class="down" height="80" viewbox="0 0 100 100" width="80">
+<svg class="S" height="80" viewbox="0 0 100 100" width="80">
 <polygon class="triangle" points="50 85, 0 0, 100 0"></polygon>
 </svg>
 </div>
@@ -803,7 +841,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 <p class="tc2 bold tar" id="log">LOG</p>
 </div>
 </footer>
-<script src="js/script.js">%SCRIPT_PLACEHOLDER%</script>
+<script>%SCRIPT_PLACEHOLDER%</script>
 </body>
 </html>
 )rawliteral";

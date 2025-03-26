@@ -2,15 +2,18 @@
 
 #include "mount/serial.hpp"
 #include "mount/data.hpp"
+#include "control.hpp"
 
 class Initialize {
 private:
-    Mount::Serial& serial;
+    Mount::Serial& mount_serial = Mount::Serial::getInstance();
+
+    Control& control = Control::getInstance();
     
     bool connectMount();
 
 public:
-    Initialize();
+    Initialize() {}
 
     void init();
 };

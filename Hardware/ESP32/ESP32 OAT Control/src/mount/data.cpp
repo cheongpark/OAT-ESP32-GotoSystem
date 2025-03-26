@@ -89,6 +89,14 @@ namespace Mount {
         return getInstance()._has_dec_hall_sensor;
     }
 
+    float Data::get_ra_dec_slew_rate() {
+        return getInstance()._ra_dec_slew_rate;
+    }
+
+    float Data::get_az_alt_slew_rate() {
+        return getInstance()._az_alt_slew_rate;
+    }
+
     // Set
     void Data::set_info_product_name(String product_name) {
         getInstance()._info_product_name = product_name;
@@ -270,6 +278,11 @@ namespace Mount {
         
         // DEC 스테퍼 정보
         String dec_part = stepper_info.substring(separator_pos + 1);
+        // 마지막 | 문자 제거
+        if (dec_part.endsWith("|")) {
+            dec_part = dec_part.substring(0, dec_part.length() - 1);
+        }
+        
         comma_pos_1 = dec_part.indexOf(',');
         if (comma_pos_1 < 0) return;
         
@@ -292,5 +305,22 @@ namespace Mount {
         } else {
             instance._info_state_stepper_dec_driver = dec_driver;
         }
+    }
+    
+    /*
+    slew_rates_num: [0, 1, 2, 3, 4, 5]
+    */
+    void Data::set_ra_dec_slew_rate(int slew_rates_num) {
+        if (slew_rates_num < 0 || slew_rates_num > 5) 
+            return;
+
+        getInstance()._ra_dec_slew_rate = RADEC_SLEW_RATES[slew_rates_num];
+    }
+
+    void Data::set_az_alt_slew_rate(int slew_rates_num) {
+        if (slew_rates_num < 0 || slew_rates_num > 5) 
+            return;
+            
+        getInstance()._az_alt_slew_rate = AZALT_SLEW_RATES[slew_rates_num];
     }
 }

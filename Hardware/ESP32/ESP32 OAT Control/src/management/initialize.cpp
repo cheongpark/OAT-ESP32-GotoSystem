@@ -1,9 +1,5 @@
 #include "management/initialize.hpp"
 
-Initialize::Initialize() : serial(Mount::Serial::getInstance()) {
-
-}
-
 void Initialize::init() {
     this->connectMount();
 }
@@ -12,19 +8,19 @@ bool Initialize::connectMount() {
     Mount::Response response; 
     
     // 제품 이름 요청
-    response = serial.request("GVP");
+    response = mount_serial.request("GVP");
     if (response.success) {
         Mount::Data::set_info_product_name(response.message);
     }
 
     // 펌웨어 버전 요청
-    response = serial.request("GVN");
+    response = mount_serial.request("GVN");
     if (response.success) {
         Mount::Data::set_info_firmware_version(response.message);
     }
 
     // 하드웨어 상태 정보 요청
-    response = serial.request("XGM");
+    response = mount_serial.request("XGM");
     if (response.success) {
         Mount::Data::set_info_state(response.message);
     }
@@ -32,7 +28,7 @@ bool Initialize::connectMount() {
     // 펌웨어 버전 확인 (스테퍼 모터 정보는 최신 펌웨어에서만 사용 가능)
     if (Mount::Data::get_info_firmware_version_num() > 10875) {
         // 스테퍼 모터 정보 요청
-        response = serial.request("XGMS");
+        response = mount_serial.request("XGMS");
         if (response.success) {
             Mount::Data::set_stepper_info(response.message);
         }
@@ -81,7 +77,9 @@ bool Initialize::connectMount() {
             LOG(LOG_INFO, "DEC Guide 마이크로스텝: " + Mount::Data::get_stepper_dec_guide_ms());
         }
     }
-    
 
+    // 초기에 모든 움직임 정지
+    control.stopSlewing();
+    
     return true;
 }

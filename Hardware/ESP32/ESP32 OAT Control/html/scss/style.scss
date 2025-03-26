@@ -72,21 +72,21 @@ header {
     justify-content: center;
     margin-top: 10px;
 
-    > .up {
+    > .N {
         grid-column: 2;
         grid-row: 1;
     }
-    > .down {
-        grid-column: 2;
-        grid-row: 3;
-    }
-    > .left {
+    > .W {
         grid-column: 1;
         grid-row: 2;
     }
-    > .right {
+    > .E {
         grid-column: 3;
         grid-row: 2;
+    }
+    > .S {
+        grid-column: 2;
+        grid-row: 3;
     }
     .triangle {
         fill: $color-3;

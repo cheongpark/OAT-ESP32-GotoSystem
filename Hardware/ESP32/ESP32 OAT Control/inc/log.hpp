@@ -5,7 +5,7 @@
 
 #include "settings.hpp"
 
-#ifdef ENABLE_LOG
+#if ENABLE_LOG == 1
 
 // 로그 레벨 정의
 enum LogLevel {

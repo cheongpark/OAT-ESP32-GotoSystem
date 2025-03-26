@@ -64,21 +64,21 @@ header {
   justify-content: center;
   margin-top: 10px;
 }
-.control-pad > .up {
+.control-pad > .N {
   grid-column: 2;
   grid-row: 1;
 }
-.control-pad > .down {
-  grid-column: 2;
-  grid-row: 3;
-}
-.control-pad > .left {
+.control-pad > .W {
   grid-column: 1;
   grid-row: 2;
 }
-.control-pad > .right {
+.control-pad > .E {
   grid-column: 3;
   grid-row: 2;
+}
+.control-pad > .S {
+  grid-column: 2;
+  grid-row: 3;
 }
 .control-pad .triangle {
   fill: #8D0000;

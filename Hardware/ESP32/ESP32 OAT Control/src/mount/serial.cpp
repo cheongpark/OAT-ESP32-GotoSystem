@@ -31,7 +31,7 @@ namespace Mount {
         return this->mnt_serial != nullptr && this->mnt_serial->available() >= 0;
     }
 
-    Response Serial::request(const String command) {
+    Response Serial::request(const String command, bool is_response) {
         if (!initialized) {
             LOG(LOG_ERROR, "시리얼이 초기화되지 않았습니다.");
             return {false, ""};
@@ -40,6 +40,10 @@ namespace Mount {
         this->mnt_serial->print(":" + command + "#");  // Serial2로 명령 전송
         LOG(LOG_INFO, "\":" + command + "#\"" + " 명령어를 보냈습니다.");
         
+        if (!is_response) {
+            return {true, ""};
+        }
+
         // 응답 대기
         unsigned long start_time = millis();
         bool response_received = false;

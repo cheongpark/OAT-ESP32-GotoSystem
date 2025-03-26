@@ -90,12 +90,49 @@ void SensorTest::test_gps_sensor() {
   // Serial2 초기화
   Serial2.begin(9600);
   
+  // 변수 초기화
+  String line = "";
+  unsigned long lastDisplayTime = 0;
+  const unsigned long displayInterval = 3000; // 3초마다 상태 표시
+  
   // 무한 루프로 데이터 출력
   while(true) {
+    // 현재 시간 체크
+    unsigned long currentTime = millis();
+    
+    // 일정 간격으로 모니터링 상태 표시
+    if(currentTime - lastDisplayTime > displayInterval) {
+      Serial.println("\n----- 모니터링 중... -----");
+      lastDisplayTime = currentTime;
+    }
+    
+    // 데이터 읽기
     if(Serial2.available()) {
       char c = Serial2.read();
+      
+      // 줄바꿈 문자가 오면 라인 출력 후 초기화
+      if(c == '\n' || c == '\r') {
+        if(line.length() > 0) {
+          Serial.println(line);
+          line = "";
+        }
+      } else {
+        // 줄바꿈이 아니면 문자 추가
+        line += c;
+        
+        // 라인이 너무 길어지면 강제 출력
+        if(line.length() > 80) {
+          Serial.println(line);
+          line = "";
+        }
+      }
+      
+      // 원시 데이터도 출력 (옵션)
       Serial.write(c);
     }
+    
+    // 약간의 지연을 주어 CPU 부하 감소
+    delay(1);
   }
 }
 

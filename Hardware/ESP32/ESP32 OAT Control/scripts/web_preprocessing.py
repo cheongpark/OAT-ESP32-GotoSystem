@@ -1,6 +1,7 @@
 from SCons.Script import Import
 import sys
 import subprocess
+import re
 
 Import("env")
 
@@ -18,6 +19,19 @@ if not check_package_installed('bs4'):
 from bs4 import BeautifulSoup
 
 def web_preprocessing(source, target, env):
+    print("웹 파일 전처리 시작...")
+    
+    # settings.hpp에서 IP 주소 읽기
+    with open("inc/settings.hpp", "r", encoding="utf-8") as f:
+        settings_content = f.read()
+    
+    # IP 주소 추출
+    ip_match = re.search(r'#define WIFI_IP\s+"([^"]+)"', settings_content)
+    if ip_match:
+        ip_address = ip_match.group(1)
+    else:
+        ip_address = "192.168.4.1"  # 기본값
+    
     # HTML 파일 읽기
     with open("html/index.html", "r", encoding="utf-8") as f:
         html_content = f.read()
@@ -29,6 +43,12 @@ def web_preprocessing(source, target, env):
     # JS 파일 읽기
     with open("html/js/script.js", "r", encoding="utf-8") as f:
         js_content = f.read()
+        
+    # DEV_MODE 값을 false로 변경
+    js_content = re.sub(r'const DEV_MODE\s*=\s*true;', 'const DEV_MODE = false;', js_content)
+    
+    # localhost를 실제 IP 주소로 변경
+    js_content = re.sub(r'http://localhost', f'http://{ip_address}', js_content)
 
     # HTML 파싱
     html_parse = BeautifulSoup(html_content, 'html.parser')
@@ -42,7 +62,10 @@ def web_preprocessing(source, target, env):
     
     # script
     script_tag = html_parse.find('script')
-    script_tag.string = '%SCRIPT_PLACEHOLDER%'
+    if script_tag: 
+        if 'src' in script_tag.attrs: # src가 있는 경우
+            del script_tag['src'] # src 속성 제거
+        script_tag.string = '%SCRIPT_PLACEHOLDER%'
     
     # footer
     footer = html_parse.find('footer')
@@ -69,5 +92,7 @@ def web_preprocessing(source, target, env):
         f.write("const char index_html[] PROGMEM = R\"rawliteral(\n")
         f.write(str(html_parse))
         f.write("\n)rawliteral\";\n")
+    
+    print("웹 파일 전처리 완료")
         
 env.AddPreAction("buildprog", web_preprocessing)

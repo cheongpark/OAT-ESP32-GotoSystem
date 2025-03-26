@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include "settings.hpp"
+
 // Mount(OAT)의 모든 데이터를 관리하는 곳, 버전이나 이런 것들을 설정하거나 가져올 수 있게 하는 것들
 
 namespace Mount {
@@ -42,8 +44,11 @@ namespace Mount {
         bool _has_ra_hall_sensor = false;
         bool _has_dec_hall_sensor = false;
 
+        // TODO az_alt는 변수에서 변경되게 하고.. ra_dec은 OAT에 요청해서 값을 넣거나 가져와서 변경하도록 해야함
+        float _ra_dec_slew_rate = RADEC_SLEW_RATES[1]; // 기본 속도
+        float _az_alt_slew_rate = AZALT_SLEW_RATES[1]; // 기본 속도
+
         Data() {}
-        ~Data() {}
 
     public:
         // Singletone
@@ -78,10 +83,16 @@ namespace Mount {
         static bool has_ra_hall_sensor();
         static bool has_dec_hall_sensor();
 
+        static float get_ra_dec_slew_rate();
+        static float get_az_alt_slew_rate();
+
         // Set
         static void set_info_product_name(String product_name);
         static void set_info_firmware_version(String firmware_version);
         static void set_info_state(String state);
         static void set_stepper_info(String stepper_info);
+        
+        static void set_ra_dec_slew_rate(int slew_rates_num);
+        static void set_az_alt_slew_rate(int slew_rates_num);
     };
 }
