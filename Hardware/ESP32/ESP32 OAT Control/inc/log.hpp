@@ -5,7 +5,7 @@
 
 #include "settings.hpp"
 
-#if ENABLE_LOG == 1
+#if LOG_ENABLE == 1
 
 // 로그 레벨 정의
 enum LogLevel {
@@ -32,7 +32,7 @@ inline void log_message(LogLevel level, const char* file, int line, const char* 
 #define LOG(level, message) log_message(level, __FILE__, __LINE__, __func__, message)
 #else
 
-// ENABLE_LOG가 정의되지 않으면 빈 매크로로 처리
+// LOG_ENABLE가 정의되지 않으면 빈 매크로로 처리
 #define LOG(level, message) ((void)0)
 
 #endif

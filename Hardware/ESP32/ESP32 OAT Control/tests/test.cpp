@@ -23,7 +23,7 @@ void test_oat() {
 SensorTest sensor_test;
 
 void test_sensor() {
-  sensor_test.test(SENSOR_GPS);
+  sensor_test.test(SENSOR_IMU);
 }
 #endif
 
@@ -74,7 +74,7 @@ void setup() {
   #if TEST_NUM == 1
   oat_test.init(Serial2, {"GVP", "GVN", "XGM"});
   #elif TEST_NUM == 2
-  sensor_test.init(SENSOR_GPS);
+  sensor_test.init(SENSOR_IMU);
   #endif
 
   UNITY_BEGIN();

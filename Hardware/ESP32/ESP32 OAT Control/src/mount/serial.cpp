@@ -6,9 +6,11 @@ namespace Mount {
         return instance;
     }
 
-    void Serial::init(HardwareSerial &mnt_serial, const unsigned long baud_rate) {
+    void Serial::init(HardwareSerial &mnt_serial, const unsigned long baud_rate, const int rxPin, const int txPin) {
         this->mnt_serial = &mnt_serial;
         this->baud_rate = baud_rate;
+
+        this->mnt_serial->begin(baud_rate, SERIAL_8N1, rxPin, txPin);
     }
 
     bool Serial::connect() {

@@ -5,7 +5,7 @@ void Initialize::init() {
 }
 
 bool Initialize::connectMount() {
-    Mount::Response response; 
+    Response response; 
     
     // 제품 이름 요청
     response = mount_serial.request("GVP");

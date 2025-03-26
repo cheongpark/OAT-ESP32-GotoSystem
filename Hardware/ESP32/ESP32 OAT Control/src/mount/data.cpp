@@ -314,13 +314,13 @@ namespace Mount {
         if (slew_rates_num < 0 || slew_rates_num > 5) 
             return;
 
-        getInstance()._ra_dec_slew_rate = RADEC_SLEW_RATES[slew_rates_num];
+        getInstance()._ra_dec_slew_rate = OAT_RADEC_SLEW_RATES[slew_rates_num];
     }
 
     void Data::set_az_alt_slew_rate(int slew_rates_num) {
         if (slew_rates_num < 0 || slew_rates_num > 5) 
             return;
             
-        getInstance()._az_alt_slew_rate = AZALT_SLEW_RATES[slew_rates_num];
+        getInstance()._az_alt_slew_rate = OAT_AZALT_SLEW_RATES[slew_rates_num];
     }
 }

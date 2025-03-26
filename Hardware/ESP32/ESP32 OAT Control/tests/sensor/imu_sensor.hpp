@@ -6,7 +6,7 @@
 #include <Adafruit_BMP085.h>
 #include <Wire.h>
 
-class GY87Data {
+class IMUData {
 public:
   struct Acceleration {
     float x;
@@ -37,7 +37,7 @@ public:
   } magnetic;
 
   // 텔레플롯에 데이터 출력
-  void printTelePlot(const char* prefix = "GY87_") {
+  void printTelePlot(const char* prefix = "IMU_") {
     // 가속도계 데이터
     Serial.print(">");
     Serial.print(prefix);
@@ -110,12 +110,12 @@ public:
   }
 };
 
-class GY87Sensor {
+class IMUSensor {
 public:
-  GY87Sensor();
+  IMUSensor();
   
   bool init();
-  bool read(GY87Data &data);
+  bool read(IMUData &data);
   bool enableMPUBypass();
 
 private:
@@ -127,13 +127,13 @@ private:
   bool bmp_available;
 };
 
-GY87Sensor::GY87Sensor() {
+IMUSensor::IMUSensor() {
   mpu_available = false;
   mag_available = false;
   bmp_available = false;
 }
 
-bool GY87Sensor::enableMPUBypass() {
+bool IMUSensor::enableMPUBypass() {
   // MPU6050의 I2C 마스터 모드 비활성화하고 패스스루 모드 활성화
   Wire.beginTransmission(0x68);  // MPU6050 I2C 주소
   Wire.write(0x6A);              // 레지스터 주소: USER_CTRL
@@ -159,7 +159,7 @@ bool GY87Sensor::enableMPUBypass() {
   return true;
 }
 
-bool GY87Sensor::init() {
+bool IMUSensor::init() {
   Wire.begin();
   
   // MPU6050 초기화
@@ -193,12 +193,12 @@ bool GY87Sensor::init() {
     
     return true;
   } else {
-    Serial.println("GY87 초기화 실패 - MPU6050 연결 확인 필요");
+    Serial.println("IMU 초기화 실패 - MPU6050 연결 확인 필요");
     return false;
   }
 }
 
-bool GY87Sensor::read(GY87Data &data) {
+bool IMUSensor::read(IMUData &data) {
   bool success = false;
   
   // MPU6050 데이터 읽기

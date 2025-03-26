@@ -3,6 +3,7 @@
 #include "mount/serial.hpp"
 #include "mount/data.hpp"
 #include "control.hpp"
+#include "utils.hpp"
 
 class Initialize {
 private:
