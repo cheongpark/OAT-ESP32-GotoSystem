@@ -51,6 +51,9 @@ void setup() {
 }
 
 void loop() {
+    // DNS 서버 처리
+    dns_server.processNextRequest();
+    
     // TODO 테스트용 나중에 지우셈
     if(false) {
         if (gps_sensor.hasValidLocation()) {
@@ -108,4 +111,19 @@ void setupWiFi() {
     WiFi.softAP(WIFI_SSID, WIFI_PASSWORD);
 
     LOG(LOG_INFO, "IP Address: " + WiFi.softAPIP().toString());
+
+    // mDNS 시작
+    if (MDNS.begin(WIFI_MDNS_HOSTNAME)) {
+        LOG(LOG_INFO, "mDNS 시작됨 - " + String(WIFI_MDNS_HOSTNAME) + ".local");
+        MDNS.addService("http", "tcp", 80);
+    } else {
+        LOG(LOG_ERROR, "mDNS 시작 실패");
+    }
+
+    // DNS 서버 시작 (모든 요청을 ESP32로 리다이렉트)
+    if (dns_server.start(53, "*", WiFi.softAPIP())) {
+        LOG(LOG_INFO, "DNS 서버 시작됨");
+    } else {
+        LOG(LOG_ERROR, "DNS 서버 시작 실패");
+    }
 }

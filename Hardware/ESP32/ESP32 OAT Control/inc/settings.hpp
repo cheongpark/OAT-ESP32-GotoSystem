@@ -20,6 +20,7 @@ extern float OAT_AZALT_SLEW_RATES[6]; // extern 무조건 필요(전역변수), 
 #define WIFI_IP "192.168.4.1"
 #define WIFI_GATEWAY "192.168.4.1"
 #define WIFI_SUBNET "255.255.255.0"
+#define WIFI_MDNS_HOSTNAME "oat"  // mDNS 호스트네임 (oat.local로 접속 가능)
 
 // GPS
 #define GPS_SERIAL Serial1 // (23, 19) pin

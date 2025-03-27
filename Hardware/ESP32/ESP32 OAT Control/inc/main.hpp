@@ -4,6 +4,8 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <WiFi.h>
+#include <DNSServer.h>
+#include <ESPmDNS.h>
 
 #include "secrets.hpp"
 #include "page.hpp"
@@ -19,6 +21,7 @@
 // Web Server
 AsyncWebServer server(80);  // 80 포트에서 웹 서버 실행
 Initialize initialize;
+DNSServer dns_server;
 WEB::WebManager& web_manager = WEB::WebManager::getInstance();
 
 // Mount

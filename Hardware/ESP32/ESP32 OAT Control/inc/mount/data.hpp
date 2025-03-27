@@ -45,8 +45,8 @@ namespace Mount {
         bool _has_dec_hall_sensor = false;
 
         // TODO az_alt는 변수에서 변경되게 하고.. ra_dec은 OAT에 요청해서 값을 넣거나 가져와서 변경하도록 해야함
-        float _ra_dec_slew_rate = OAT_RADEC_SLEW_RATES[1]; // 기본 속도
-        float _az_alt_slew_rate = OAT_AZALT_SLEW_RATES[1]; // 기본 속도
+        float _ra_dec_slew_rate = OAT_RADEC_SLEW_RATES[5]; // 기본 속도
+        float _az_alt_slew_rate = OAT_AZALT_SLEW_RATES[5]; // 기본 속도
 
         Data() {}
 

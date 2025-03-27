@@ -66,8 +66,7 @@
 // Wifi 작동 모드 (ESP32 전용)
 #define WIFI_MODE_INFRASTRUCTURE 0  // 인프라 전용 - OAT가 기존 라우터에 연결
 #define WIFI_MODE_AP_ONLY        1  // AP 모드 전용 - OAT가 로컬 라우터/핫스팟으로 작동
-#define WIFI_MODE_ATTEMPT_INFRASTRUCTURE_FAIL_TO_AP                                                                                        \
-    2                         // 인프라 시도, AP 모드로 실패 - 인프라 모드 시도 후 AP 모드로 전환
+#define WIFI_MODE_ATTEMPT_INFRASTRUCTURE_FAIL_TO_AP  2  // 인프라 시도, AP 모드로 실패 - 인프라 모드 시도 후 AP 모드로 전환
 #define WIFI_MODE_DISABLED 3  // Wifi 비활성화, 송수신기 꺼짐
 
 // 디버깅 출력 제어
