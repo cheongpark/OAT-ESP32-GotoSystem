@@ -35,6 +35,10 @@ namespace Mount {
         return getInstance()._info_state_display;
     }
 
+    bool Data::get_connected() {
+        return getInstance()._connected;
+    }
+
     // Get - 스테퍼 정보
     String Data::get_stepper_ra_driver() {
         return getInstance()._info_state_stepper_ra_driver;
@@ -96,6 +100,31 @@ namespace Mount {
     float Data::get_az_alt_slew_rate() {
         return getInstance()._az_alt_slew_rate;
     }
+
+    float Data::get_steps_ra() {
+        return getInstance()._steps_ra;
+    }
+
+    float Data::get_steps_dec() {
+        return getInstance()._steps_dec;
+    }
+
+    float Data::get_speed_factor() {
+        return getInstance()._speed_factor;
+    }
+    
+    String Data::get_lst() {
+        return getInstance()._lst;
+    }
+
+    float Data::get_longitude() {
+        return getInstance()._longitude;
+    }
+
+    float Data::get_latitude() {
+        return getInstance()._latitude;
+    }
+    
 
     // Set
     void Data::set_info_product_name(String product_name) {
@@ -192,22 +221,13 @@ namespace Mount {
                     addons = addons.substring(addon_comma_pos + 1);
                 }
                 
-                if (addon == "GPS") {
-                    instance._has_gps = true;
-                    instance._info_state_gps = "Connected";
-                } else if (addon == "AUTO_AZ_ALT") {
+                if (addon == "AUTO_AZ_ALT") {
                     instance._has_alt = true;
                     instance._has_az = true;
-                    instance._info_state_azalt_stepper = "Connected";
                 } else if (addon == "AUTO_ALT") {
                     instance._has_alt = true;
-                    instance._info_state_azalt_stepper = "ALT Connected";
                 } else if (addon == "AUTO_AZ") {
                     instance._has_az = true;
-                    instance._info_state_azalt_stepper = "AZ Connected";
-                } else if (addon == "GYRO") {
-                    instance._has_gyro = true;
-                    instance._info_state_gyro = "Connected";
                 } else if (addon == "LCD_KEYPAD") {
                     instance._info_state_display = "16x2 LCD (w/ buttons)";
                 } else if (addon == "LCD_I2C_MCP23008") {
@@ -218,13 +238,10 @@ namespace Mount {
                     instance._info_state_display = "Pixel OLED (SSD1306 on I2C) w/ joystick";
                 } else if (addon == "FOC") {
                     instance._has_focuser = true;
-                    instance._info_state_focuser = "Connected";
                 } else if (addon == "HSAH") {
                     instance._has_ra_hall_sensor = true;
-                    instance._info_state_ra_hall_sensor = "Connected";
                 } else if (addon == "HSAV") {
                     instance._has_dec_hall_sensor = true;
-                    instance._info_state_dec_hall_sensor = "Connected";
                 } else if (addon.startsWith("INFO_")) {
                     int underscore_pos_1 = addon.indexOf('_', 5);
                     int underscore_pos_2 = addon.indexOf('_', underscore_pos_1 + 1);
@@ -307,6 +324,10 @@ namespace Mount {
         }
     }
     
+    void Data::set_connected(bool connected) {
+        getInstance()._connected = connected;
+    }
+    
     /*
     slew_rates_num: [0, 1, 2, 3, 4, 5]
     */
@@ -322,5 +343,97 @@ namespace Mount {
             return;
             
         getInstance()._az_alt_slew_rate = OAT_AZALT_SLEW_RATES[slew_rates_num];
+    }
+
+    void Data::set_steps_ra(String steps) {
+        getInstance()._steps_ra = max(1.0f, steps.toFloat());
+    }
+
+    void Data::set_steps_dec(String steps) {
+        getInstance()._steps_dec = max(1.0f, steps.toFloat());
+    }
+
+    void Data::set_speed_factor(String speed_factor) {
+        getInstance()._speed_factor = speed_factor.toFloat();
+    }
+
+    void Data::set_lst(String lst) {
+        if (lst.length() == 6) {
+            lst = lst.substring(0, 2) + ":" + lst.substring(2, 4) + ":" + lst.substring(4);
+        }
+
+        getInstance()._lst = lst;
+    }
+
+    void Data::set_longitude(String lon) {
+        double longitude = 0.0;
+        int values[3] = {0, 0, 0};
+        int valueIndex = 0;
+        int startPos = 0;
+        
+        // 문자열 파싱
+        for (int i = 0; i < lon.length(); i++) {
+            // 구분자 찾기 ('*' 또는 '\'')
+            if (lon.charAt(i) == '*' || lon.charAt(i) == '\'') {
+                // 현재 부분을 정수로 변환
+                values[valueIndex++] = lon.substring(startPos, i).toInt();
+                startPos = i + 1;
+                
+                // 최대 3개의 부분만 처리
+                if (valueIndex >= 3) break;
+            }
+        }
+        
+        // 마지막 부분 처리 (구분자 이후)
+        if (startPos < lon.length() && valueIndex < 3) {
+            values[valueIndex] = lon.substring(startPos).toInt();
+        }
+        
+        // 도, 분, 초를 10진수로 변환
+        longitude = values[0] + values[1] / 60.0;
+        if (valueIndex >= 2) {
+            longitude += values[2] / 3600.0;
+        }
+
+        if (getInstance()._info_firmware_version_num < 11105) {
+            longitude = 180 - longitude;
+        } else {
+            longitude = -longitude;
+        }
+
+        getInstance()._longitude = longitude;
+    }
+
+    void Data::set_latitude(String lat) {
+        double latitude = 0.0;
+        int values[3] = {0, 0, 0};
+        int valueIndex = 0;
+        int startPos = 0;
+        
+        // 문자열 파싱
+        for (int i = 0; i < lat.length(); i++) {
+            // 구분자 찾기 ('*' 또는 '\'')
+            if (lat.charAt(i) == '*' || lat.charAt(i) == '\'') {
+                // 현재 부분을 정수로 변환
+                values[valueIndex++] = lat.substring(startPos, i).toInt();
+                startPos = i + 1;
+                
+                // 최대 3개의 부분만 처리
+                if (valueIndex >= 3) break;
+            }
+        }
+        
+        // 마지막 부분 처리 (구분자 이후)
+        if (startPos < lat.length() && valueIndex < 3) {
+            values[valueIndex] = lat.substring(startPos).toInt();
+        }
+        
+        // 도, 분, 초를 10진수로 변환
+        latitude = values[0] + values[1] / 60.0;
+        if (valueIndex >= 2) {
+            latitude += values[2] / 3600.0;
+        }
+
+        getInstance()._latitude = latitude;
     }
 }
