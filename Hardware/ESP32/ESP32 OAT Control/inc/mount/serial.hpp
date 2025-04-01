@@ -27,7 +27,6 @@ namespace Mount {
         // Fucn
         void init(HardwareSerial &mnt_serial, const unsigned long baud_rate, const int rxPin, const int txPin);
         bool connect();
-        bool isConnected();
         
         Response request(const String command, bool is_response = true);
     };

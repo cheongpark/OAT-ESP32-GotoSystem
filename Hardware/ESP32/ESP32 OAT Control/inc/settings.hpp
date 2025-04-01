@@ -40,3 +40,6 @@ extern float OAT_AZALT_SLEW_RATES[6]; // extern 무조건 필요(전역변수), 
 // IMU
 #define IMU_I2C_SDA 21
 #define IMU_I2C_SCL 22
+
+// Data
+#define DATA_UPDATE_INTERVAL_MS 1000 // 1초

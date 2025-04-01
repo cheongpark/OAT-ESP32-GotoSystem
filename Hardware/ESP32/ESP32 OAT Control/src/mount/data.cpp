@@ -436,4 +436,94 @@ namespace Mount {
 
         getInstance()._latitude = latitude;
     }
+
+    // 상태 업데이트
+
+    void Data::updateStatus() {
+        if (!getInstance()._connected) return;
+        if (!shouldUpdateStatus()) return;
+        
+        // OAT 상태 요청 (GX)
+        Response response = getInstance().mount_serial.request("GX");
+        if (!response.success) return;
+
+        // 상태 정보 파싱
+        String status = response.message;
+        int comma_pos = status.indexOf(',');
+        if (comma_pos < 0) return;
+
+        // 상태 정보 추출
+        String mount_status = status.substring(0, comma_pos);
+        String ra_position = "";
+        String dec_position = "";
+        String trk_position = "";
+        String focus_position = "";
+        String ra_coordinate = "";
+        String dec_coordinate = "";
+
+        // RA/DEC 위치 정보 추출
+        int next_comma = status.indexOf(',', comma_pos + 1);
+        if (next_comma > 0) {
+            ra_position = status.substring(comma_pos + 1, next_comma);
+            comma_pos = next_comma;
+        }
+
+        next_comma = status.indexOf(',', comma_pos + 1);
+        if (next_comma > 0) {
+            dec_position = status.substring(comma_pos + 1, next_comma);
+            comma_pos = next_comma;
+        }
+
+        next_comma = status.indexOf(',', comma_pos + 1);
+        if (next_comma > 0) {
+            trk_position = status.substring(comma_pos + 1, next_comma);
+            comma_pos = next_comma;
+        }
+
+        // RA/DEC 좌표 정보 추출
+        next_comma = status.indexOf(',', comma_pos + 1);
+        if (next_comma > 0) {
+            ra_coordinate = status.substring(comma_pos + 1, next_comma);
+            comma_pos = next_comma;
+        }
+
+        next_comma = status.indexOf(',', comma_pos + 1);
+        if (next_comma > 0) {
+            dec_coordinate = status.substring(comma_pos + 1, next_comma);
+            comma_pos = next_comma;
+        }
+
+        // Focus 정보 추출 (있는 경우)
+        if (comma_pos + 1 < status.length()) {
+            focus_position = status.substring(comma_pos + 1);
+        }
+
+        // LST 요청
+        response = getInstance().mount_serial.request("XGL");
+        if (response.success) {
+            String lst = response.message;
+            if (lst.length() == 6) {
+                lst = lst.substring(0, 2) + ":" + lst.substring(2, 4) + ":" + lst.substring(4);
+            }
+            set_lst(lst);
+        }
+
+        String status_message = "상태 업데이트 - 위치: " + ra_position + ", " + dec_position + ", " + String(getInstance()._last_status_update);
+        LOG(LOG_INFO, status_message);
+
+        // 상태 정보 업데이트
+        set_info_state(mount_status);
+        set_steps_ra(ra_position);
+        set_steps_dec(dec_position);
+        set_speed_factor(trk_position);
+
+        // 마지막 업데이트 시간 갱신
+        getInstance()._last_status_update = millis();
+    }
+
+    bool Data::shouldUpdateStatus() {
+        unsigned long current_time = millis();
+        unsigned long elapsed = current_time - getInstance()._last_status_update;
+        return elapsed >= DATA_UPDATE_INTERVAL_MS;
+    }
 }

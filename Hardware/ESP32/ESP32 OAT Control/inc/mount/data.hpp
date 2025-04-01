@@ -3,12 +3,15 @@
 #include <Arduino.h>
 
 #include "settings.hpp"
+#include "serial.hpp"
 
 // Mount(OAT)의 모든 데이터를 관리하는 곳, 버전이나 이런 것들을 설정하거나 가져올 수 있게 하는 것들
 
 namespace Mount {
     class Data {
     private:
+        Mount::Serial& mount_serial = Mount::Serial::getInstance();
+
         // Info
         String _info_product_name = "Unknown";
         String _info_firmware_version = "Unknown";
@@ -47,6 +50,9 @@ namespace Mount {
         String _lst = "00:00:00";
         float _longitude = 0;
         float _latitude = 0;
+
+        // 상태 업데이트 타이머
+        unsigned long _last_status_update = 0;
                 
         Data() {}
 
@@ -111,5 +117,9 @@ namespace Mount {
         static void set_lst(String lst);
         static void set_longitude(String longitude);
         static void set_latitude(String latitude);
+
+        // 상태 업데이트
+        static void updateStatus();
+        static bool shouldUpdateStatus();
     };
 }

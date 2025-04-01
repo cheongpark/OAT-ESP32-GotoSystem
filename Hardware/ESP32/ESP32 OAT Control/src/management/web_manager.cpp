@@ -1,9 +1,6 @@
 #include "management/web_manager.hpp"
-#include "log.hpp"
 
 namespace WEB {
-    WebManager* WebManager::instance = nullptr;
-    
     WebManager::WebManager() {
         server = new AsyncWebServer(80);
     }

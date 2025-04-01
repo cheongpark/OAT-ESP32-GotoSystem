@@ -51,44 +51,47 @@ void setup() {
 }
 
 void loop() {
+    // OAT 상태 업데이트
+    mount_data.updateStatus();
+    
     // DNS 서버 처리
     dns_server.processNextRequest();
     
-    // TODO 테스트용 나중에 지우셈
-    if(false) {
-        if (gps_sensor.hasValidLocation()) {
-            String location = gps_sensor.getFormattedLocation();
-            Serial.println("현재 위치: " + location);
-        }
-        else {
-            String location = gps_sensor.getFormattedLocation();
-            Serial.println("위치 측정 불가능, 기본 위치: " + location);
-        }
+    // // TODO 테스트용 나중에 지우셈
+    // if(false) {
+    //     if (gps_sensor.hasValidLocation()) {
+    //         String location = gps_sensor.getFormattedLocation();
+    //         Serial.println("현재 위치: " + location);
+    //     }
+    //     else {
+    //         String location = gps_sensor.getFormattedLocation();
+    //         Serial.println("위치 측정 불가능, 기본 위치: " + location);
+    //     }
         
-        if (gps_sensor.hasValidTime()) {
-            String utc_time = gps_sensor.getFormattedUTCDateTime();
-            String local_time = gps_sensor.getFormattedLocalDateTime();
-            Serial.println("UTC 시간: " + utc_time);
-            Serial.println("로컬 시간: " + local_time);
-        }
-        else {
-            String utc_time = gps_sensor.getFormattedUTCDateTime();
-            String local_time = gps_sensor.getFormattedLocalDateTime();
-            Serial.println("시간 측정 불가능, 기본 시간: " + utc_time);
-        }
-    }
-    else {
-        if (imu_sensor.isConnected()) {
-            Serial.println("가속도: " + imu_sensor.getAccelerationString());
-            Serial.println("자이로스코프: " + imu_sensor.getGyroscopeString());
-            Serial.println("온도: " + imu_sensor.getTemperatureString());
-            Serial.println("고도: " + imu_sensor.getAltitudeString());
-        } else {
-            Serial.println("IMU 센서가 연결되지 않았습니다.");
-        }
-    }
+    //     if (gps_sensor.hasValidTime()) {
+    //         String utc_time = gps_sensor.getFormattedUTCDateTime();
+    //         String local_time = gps_sensor.getFormattedLocalDateTime();
+    //         Serial.println("UTC 시간: " + utc_time);
+    //         Serial.println("로컬 시간: " + local_time);
+    //     }
+    //     else {
+    //         String utc_time = gps_sensor.getFormattedUTCDateTime();
+    //         String local_time = gps_sensor.getFormattedLocalDateTime();
+    //         Serial.println("시간 측정 불가능, 기본 시간: " + utc_time);
+    //     }
+    // }
+    // else {
+    //     if (imu_sensor.isConnected()) {
+    //         Serial.println("가속도: " + imu_sensor.getAccelerationString());
+    //         Serial.println("자이로스코프: " + imu_sensor.getGyroscopeString());
+    //         Serial.println("온도: " + imu_sensor.getTemperatureString());
+    //         Serial.println("고도: " + imu_sensor.getAltitudeString());
+    //     } else {
+    //         Serial.println("IMU 센서가 연결되지 않았습니다.");
+    //     }
+    // }
 
-    delay(1000);
+    delay(500);
 }
 
 // WiFi 연결 설정

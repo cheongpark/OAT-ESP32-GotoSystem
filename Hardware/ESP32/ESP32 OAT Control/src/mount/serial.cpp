@@ -26,11 +26,7 @@ namespace Mount {
 
         initialized = true;
 
-        return this->isConnected();
-    }
-
-    bool Serial::isConnected() {
-        return this->mnt_serial != nullptr && this->mnt_serial->available() >= 0;
+        return true;
     }
 
     Response Serial::request(const String command, bool is_response) {

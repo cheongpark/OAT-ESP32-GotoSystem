@@ -5,6 +5,7 @@
 #include "mount/data.hpp"
 #include "page.hpp"
 #include "management/control.hpp"
+#include "log.hpp"
 
 // Web 관련된 것을 전부 관리하는 것
 // 싱글톤 패턴으로 구현
@@ -13,7 +14,6 @@ namespace WEB {
     class WebManager {
     private:
         AsyncWebServer* server;
-        static WebManager* instance;
 
         Control& control = Control::getInstance();
         

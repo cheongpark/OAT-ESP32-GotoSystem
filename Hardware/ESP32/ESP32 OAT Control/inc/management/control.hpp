@@ -7,8 +7,6 @@
 
 class Control {
 private:
-    static Control* instance;
-
     Mount::Serial& mount_serial = Mount::Serial::getInstance();
     Mount::Data& mount_data = Mount::Data::getInstance();
 
