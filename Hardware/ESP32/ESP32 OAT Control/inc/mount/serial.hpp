@@ -31,4 +31,3 @@ namespace Mount {
         Response request(const String command, bool is_response = true);
     };
 }
-

@@ -793,49 +793,6 @@ namespace SENSOR {
         return getFormattedLocalTime();
     }
 
-    // ===== 상태 확인 함수 =====
-    bool GPS::hasValidLocation() {
-        // GPS_FAKE_DATA가 꺼져있고 초기 기본 위치와 동일하다면 유효하지 않은 위치로 간주
-#if !GPS_FAKE_DATA
-        // 초기 기본값과 거의 같다면 (작은 오차 범위 내) 아직 유효하지 않은 위치로 간주
-        if (fabs(_latitude - _default_latitude) < 0.001 && 
-            fabs(_longitude - _default_longitude) < 0.001) {
-            return false;
-        }
-#endif
-        
-        // 위도가 기본값이 아니면 유효한 위치로 간주
-        return true;
-    }
-    
-    bool GPS::hasValidTime() {
-#if GPS_FAKE_DATA
-        // 가짜 데이터 모드에서는 항상 유효한 시간으로 간주
-        return true;
-#else
-        // 실제 GPS 모드에서는 기본값과 비교하여 유효성 판단
-        if (_utc_year == _default_year && _utc_month == _default_month && _utc_day == _default_day) {
-            return false;
-        }
-        
-        // 유효한 시간인지 확인 (2023년 이상인 경우)
-        return (_utc_year >= 2023);
-#endif
-    }
-    
-    bool GPS::hasValidAltitude() {
-        // GPS_FAKE_DATA가 꺼져있고 초기 기본 고도와 동일하다면 유효하지 않은 고도로 간주
-#if !GPS_FAKE_DATA
-        // 초기 기본값과 거의 같다면 (작은 오차 범위 내) 아직 유효하지 않은 고도로 간주
-        if (fabs(_altitude - _default_altitude) < 0.1) {
-            return false;
-        }
-#endif
-        
-        // 고도가 기본값이 아니면 유효한 고도로 간주
-        return true;
-    }
-
     // ===== 기본값 설정 함수 =====
     void GPS::setDefaultLocation(double latitude, double longitude, double altitude) {
         _default_latitude = latitude;
@@ -876,11 +833,6 @@ namespace SENSOR {
         
         LOG(LOG_INFO, "GPS 기본 시간 설정: " + String(hour) + ":" + 
                        String(minute) + ":" + String(second) + " UTC");
-    }
-    
-    void GPS::setDefaultDateTime(int year, int month, int day, int hour, int minute, int second) {
-        setDefaultDate(year, month, day);
-        setDefaultTime(hour, minute, second);
     }
     
     // ===== 기본값 조회 함수 =====

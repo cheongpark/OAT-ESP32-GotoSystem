@@ -36,4 +36,3 @@ inline void log_message(LogLevel level, const char* file, int line, const char* 
 #define LOG(level, message) ((void)0)
 
 #endif
-
